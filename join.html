@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Join as a volunteer with Kishanganj Youth Club. Be the power for direct on-ground civic change in our community." />
+  <title>Join as Volunteer — Kishanganj Youth Club</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>" />
+  
+  <style>
+    /* ── CUSTOM EXTENSIONS FOR JOIN HERO & ACTION INTERFACE ── */
+    
+    .join-hero {
+      position: relative;
+      padding: 160px 0 80px 0;
+      background: linear-gradient(to bottom, rgba(12, 15, 10, 0.85), var(--bg-2)), url('assets/banner.png');
+      background-size: cover;
+      background-position: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .join-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(74, 222, 128, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .join-hero h1 {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+
+    .join-hero p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .join-section {
+      padding: 60px 0 100px 0;
+      background: var(--bg-2);
+    }
+
+    .join-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+      align-items: center;
+    }
+
+    /* Left Side Info Panel */
+    .join-info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+    }
+
+    .join-info-card h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .perk-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .perk-item {
+      display: flex;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .perk-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--amber);
+      font-family: var(--font-mono);
+      font-weight: bold;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .perk-text h4 {
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .perk-text p {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    /* Right Side Action Card Redirecting to Google Form */
+    .join-cta-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 50px 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .join-cta-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--green), var(--amber));
+    }
+
+    .join-cta-card-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(74, 222, 128, 0.07);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .join-cta-card-icon svg {
+      width: 30px;
+      height: 30px;
+      stroke: var(--green);
+    }
+
+    .join-cta-card h3 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .join-cta-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 420px;
+    }
+
+    /* Responsive Constraints */
+    @media (max-width: 992px) {
+      .join-container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .join-hero h1 {
+        font-size: 2.8rem;
+      }
+      .join-info-card, .join-cta-card {
+        padding: 32px 20px;
+      }
+      .join-cta-card h3 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="assets/logo.png" alt="KYC Logo" class="nav-logo-img">
+      <span class="nav-logo-text">KISHANGANJ YOUTH CLUB<span>.</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html"    class="nav-link">Home</a>
+      <a href="about.html"    class="nav-link">About</a>
+      <a href="projects.html" class="nav-link">Projects</a>
+      <a href="mission.html"  class="nav-link">Mission</a>
+      <a href="team.html"     class="nav-link">Team</a>
+      <a href="track.html"    class="nav-link">Track</a>
+    </div>
+    <div class="flex gap-8">
+      <a href="https://forms.gle/Q5CQQNLHm31dWDU98" target="_blank" class="btn btn-primary btn-sm nav-cta">Report Issue</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html"    class="nav-link">Home</a>
+    <a href="about.html"    class="nav-link">About</a>
+    <a href="projects.html" class="nav-link">Projects</a>
+    <a href="mission.html"  class="nav-link">Mission</a>
+    <a href="team.html"     class="nav-link">Team</a>
+    <a href="track.html"    class="nav-link">Track Status</a>
+    <a href="https://forms.gle/Q5CQQNLHm31dWDU98" target="_blank" class="nav-link">Report Issue</a>
+  </div>
+
+  <section class="page-hero">
+    <div class="hero-grid"></div>
+    <div class="container" style="position:relative;z-index:2">
+      <div class="section-tag fade-in">Join Us</div>
+      <h1 class="page-hero-title fade-in">Join The <span>Movement</span></h1>
+      <p class="page-hero-sub fade-in">Be the localized on-ground muscle driving strict verification, direct accountability, and systemic city civic execution.</p>
+    </div>
+  </section>
+
+  <section class="join-section">
+    <div class="container">
+      <div class="join-container">
+        
+        <div class="join-info-card">
+          <h2>Why Volunteer?</h2>
+          <p style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.6;">
+            Kishanganj Youth Club functions as an organized ecosystem. As part of our volunteer division, you do not just clean roads; you operate as a technical data validator ensuring civic integrity.
+          </p>
+
+          <div class="perk-list">
+            <div class="perk-item">
+              <div class="perk-icon">01</div>
+              <div class="perk-text">
+                <h4>On-Ground Auditing</h4>
+                <p>Deploy directly to coordinate verification checkpoints on newly raised complaint pipelines.</p>
+              </div>
+            </div>
+
+            <div class="perk-item">
+              <div class="perk-icon">02</div>
+              <div class="perk-text">
+                <h4>Admin Dashboard Access</h4>
+                <p>Gain access credentials to process and escalation workflow states directly from the control desk.</p>
+              </div>
+            </div>
+
+            <div class="perk-item">
+              <div class="perk-icon">03</div>
+              <div class="perk-text">
+                <h4>Certified Civic Leadership</h4>
+                <p>Earn official verification references and community project lead tokens for outstanding track milestones.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="join-cta-card">
+          <div class="join-cta-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+            </svg>
+          </div>
+          <h3>Application Portal</h3>
+          <p>Click below to fill out our official volunteer onboarding questionnaire via Google Forms. Our core manual management panel review loop typically responds within 48 hours.</p>
+          
+          <a href="https://forms.gle/fWffUfM9MuhwyRR48" target="_blank" class="btn btn-primary" style="padding: 16px 32px; font-weight: 500; letter-spacing: 0.02em;">
+            Open Registration Form
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker-wrap">
+    <div class="ticker-inner">
+      <div class="ticker-item"><span class="dot"></span>JOIN THE VOLUNTEER CORPS</div>
+      <div class="ticker-item"><span class="dot"></span>VERIFY LOCAL REQUISITIONS</div>
+      <div class="ticker-item"><span class="dot"></span>DRIVE CIVIC LEADERSHIP</div>
+      <div class="ticker-item"><span class="dot"></span>MISSION CLEAN CITY EXECUTION</div>
+    </div>
+  </div>
+
+<!-- ─────────────────────────── FOOTER ──────────────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+
+      <div>
+        <div class="nav-logo" style="margin-bottom:16px">
+          <div class="nav-logo-mark">K</div>
+          <span class="nav-logo-text">KYC<span>.</span></span>
+        </div>
+        <p class="footer-brand-desc">Kishanganj Youth Club — transforming our city through direct action, community pressure, and youth power. Mission Clean City is our commitment to Kishanganj.</p>
+        <div class="social-links">
+          <a href="#" class="social-link" title="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="social-link" title="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" class="social-link" title="Twitter / X">
+            <svg viewBox="0 0 24 24"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+          </a>
+          <a href="#" class="social-link" title="YouTube">
+            <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+          </a>
+          <a href="#" class="social-link" title="WhatsApp">
+            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-heading">Navigation</div>
+        <div class="footer-links">
+          <a href="index.html"    class="footer-link">Home</a>
+          <a href="about.html"    class="footer-link">About Us</a>
+          <a href="projects.html" class="footer-link">Projects</a>
+          <a href="mission.html"  class="footer-link">Mission Clean City</a>
+          <a href="team.html"     class="footer-link">Our Team</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-heading">Take Action</div>
+        <div class="footer-links">
+          <a href="join.html"      class="footer-link">Join as Volunteer</a>
+          <a href="mission.html"   class="footer-link">Report an Issue</a>
+          <a href="track.html"     class="footer-link">Track Complaint</a>
+          <a href="volunteer.html" class="footer-link">Volunteer Login</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-heading">Contact</div>
+        <div class="footer-links">
+          <a href="mailto:kyckishanganj@gmail.com" class="footer-link">aarzoohusain31@gmail.com</a>
+          <a href="tel:+919876543210"              class="footer-link">+91 82712 70712</a>
+          <span class="footer-link" style="cursor:default">Kishanganj, Bihar (855108)</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Kishanganj Youth Club. All rights reserved.</span>
+      
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
