@@ -1461,6 +1461,167 @@ select.form-control { cursor: pointer; }
   .hero-btns { flex-direction: column; }
   .hero-btns .btn { width: 100%; justify-content: center; }
   .filter-btn { font-size: 0.78rem; padding: 6px 14px; }
+
+
+  /* ── MOBILE NAVBAR COMPACT DESIGN ── */
+@media (max-width: 768px) {
+
+  .navbar .nav-cta,
+  .navbar .flex.gap-8 {
+    display: none !important; /* Mobile navbar se Join Us button aur uske container ko fully hide karega */
+  }
+  
+  /* 1. Navbar ki height aur padding kam karien */
+  .navbar {
+    padding: 10px 16px !important; /* Top/Bottom padding 16px se hata kar 10px ki */
+    height: 60px;                  /* Ek standard fixed mobile height */
+  }
+
+  /* 2. Mobile me Logo Image ko chhota karein taaki navbar stretch na ho */
+  .nav-logo-img {
+    height: 30px !important;       /* Desktop par 38px tha, mobile par 30px perfectly clean lagega */
+    padding: 2px !important;       /* Border padding ko bhi thoda kam kiya */
+  }
+
+  /* 3. Hamburger icon ka size aur alignment match karein */
+  .hamburger {
+    display: flex !important;       /* Mobile par iska flex hona zaroori hai */
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    width: 28px !important;         /* Compact width */
+    height: 18px !important;        /* Compact height */
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    cursor: pointer !important;
+    z-index: 1002 !important;       /* Taaki clickable rahe */
+  }
+  
+  .hamburger span {
+    display: block !important;
+    width: 100% !important;
+    height: 3px !important;         /* Lines ki thickness */
+    background-color: #4ade80 !important; /* Pure clear neon green color taaki dark theme par saaf dikhe */
+    border-radius: 2px !important;
+    transition: all 0.3s ease-in-out !important;
+  }
+
+  /* ── 4. CONTENT HIDE PROBLEM PERMANENT FIX ── */
+  /* Aapka main header content ya body top se chipke na, isliye poore webpage ke 
+     main container par navbar ki height ke barabar ka safe top space barha rahe hain */
+  body {
+    padding-top: 60px;             /* Exact navbar height jitna gap automatic add ho jayega */
+  }
+  
+  /* Agar aapne body ki jagah kisi special hero/header section par wrapper lagaya hai, 
+     toh aap uspar bhi padding-top: 70px ya 80px de sakte hain */
+
+     /* ── 1. GENERAL BUTTON COMPACT SIZE ── */
+  /* Agar aapne links ya buttons par standard .btn class lagayi hai */
+  .btn, 
+  button, 
+  .mobile-menu .nav-cta,
+  [class*="button"] { 
+    padding: 10px 16px !important; /* Vertical padding ko kam kiya taaki button ki height choti ho jaye */
+    font-size: 0.95rem !important;  /* Font size ko thoda chota kiya mobile ke liye */
+    border-radius: 8px !important;  /* Corners ko clean design diya */
+    width: 100% !important;         /* Full width rahega par sleek dikhega */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;            /* Icon aur text ke beech ka gap */
+  }
+
+  /* ── 2. HERO/MAIN HOME BUTTONS FIX ── */
+  /* Jo buttons aane-saamne ya upar-niche bade dikh rahe hain unki vertical height control karne ke liye */
+  .hero-buttons,
+  .main-actions,
+  .grid-2 {
+    gap: 12px !important;          /* Buttons ke beech ka gap kam kiya */
+    margin-top: 16px !important;   /* Pure section se upper gap maintain rakhne ke liye */
+  }
+
+  /* ── 3. BUTTONS KE ANDAR KE ICONS ── */
+  /* Agar buttons ke andar logo ya icons (jaise user-plus, alert-triangle) bade hain */
+  .btn svg,
+  button svg {
+    width: 18px !important;        /* Icons ka size chota kiya */
+    height: 18px !important;
+  }
+
+  .button-container-class-name { 
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important; /* Do barabar columns bana dega */
+    gap: 10px !important;
+  }
+
+  /* 1. Buttons ke parent container (flex div) ko mobile par stack (column) karein */
+  .page-hero .flex.gap-16.flex-wrap {
+    display: flex !important;
+    flex-direction: column !important; /* Buttons ko ek ke neeche ek line me layega */
+    gap: 12px !important;              /* Dono ke beech ka gap kam kareya */
+    margin-top: 24px !important;       /* Top spacing ko compact karega */
+    width: 100% !important;
+  }
+
+  /* 2. Dono buttons (.btn-primary aur .btn-outline) ko sleek aur chhota karein */
+  .page-hero .btn {
+    width: 100% !important;            /* Mobile screen par full width stretch ho sakein */
+    height: 46px !important;           /* Ekdum standard crisp height */
+    padding: 0 16px !important;        /* Extra moti padding ko khatam kiya */
+    font-size: 0.95rem !important;     /* Text size ko balanced kiya */
+    display: inline-flex !important;
+    align-items: center !important;     /* Icon aur text vertically ek line me center honge */
+    justify-content: center !important; /* Content button ke bilkul beech me rahega */
+    border-radius: 8px !important;     /* Corners ko perfect curve diya */
+  }
+
+  /* 3. Icons ka size aur unka alignment thik karein */
+  .page-hero .btn svg {
+    width: 18px !important;            /* Desktop par 22px tha, mobile par 18px perfect hai */
+    height: 18px !important;
+    margin: 0 !important;              /* Kisi bhi purane alignment shifting ko clear karega */
+    flex-shrink: 0;
+  }
+
+  /* 1. Container ko mobile par flex-direction column (vertical list) karein */
+  .section-sm .flex-center.gap-16.flex-wrap {
+    display: flex !important;
+    flex-direction: column !important; /* Buttons ko upar-neeche smoothly stack karega */
+    gap: 12px !important;              /* Buttons ke beech ka vertical gap compact karega */
+    width: 100% !important;
+    max-width: 340px !important;       /* Buttons ko zyada lamba (stretch) hone se rokega */
+    margin: 0 auto !important;         /* Buttons ko screen ke center me rakhega */
+    padding: 0 16px !important;
+  }
+
+  /* 2. "Become a Volunteer" aur "Report an Issue" buttons ka size compact karein */
+  .section-sm .btn-lg {
+    width: 100% !important;            /* Pure inner container width me set rahega */
+    height: 46px !important;           /* Pehle wale buttons ki tarah fixed crisp height */
+    padding: 0 16px !important;        /* Thick padding hata kar simple aur neat layout */
+    font-size: 0.95rem !important;      /* Text mobile grid ke hisab se balanced */
+    display: inline-flex !important;
+    align-items: center !important;     /* Icon aur text vertically center honge */
+    justify-content: center !important; /* Content button ke bilkul beech me rahega */
+    border-radius: 8px !important;     /* Rounded borders matching your theme */
+    box-sizing: border-box !important;
+  }
+
+  /* 3. Buttons ke andar ke SVG Icons ka alignment fix karein */
+  .section-sm .btn-lg svg {
+    width: 16px !important;            /* Mobile scale layout */
+    height: 16px !important;
+    margin: 0 8px 0 0 !important;      /* Icon ke right side me text se perfect spacing */
+    flex-shrink: 0 !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
+
+}
+
+
+
 }
 
 @media (max-width: 480px) {

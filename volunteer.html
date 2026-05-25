@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Volunteer Portal — Kishanganj Youth Club</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── Portal shell ──────────────────────────────────────── */
+    body { overflow-x: hidden; }
+
+    /* ── LOGIN SCREEN ──────────────────────────────────────── */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      background: var(--bg);
+    }
+    .login-split-left {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+    }
+    .login-split-right {
+      flex: 1;
+      background:
+        linear-gradient(135deg, rgba(74,222,128,0.06) 0%, transparent 60%),
+        var(--bg-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+      border-left: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .login-split-right .grid-bg {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(74,222,128,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74,222,128,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .login-card {
+      width: min(420px, 100%);
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-2);
+      border-radius: 20px;
+      padding: 44px 40px;
+    }
+    .login-logo {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 32px;
+    }
+    .login-logo-mark {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--green-dim), var(--green));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 1.4rem; color: #0c0f0a;
+    }
+    .login-logo-text { font-family: var(--font-display); font-size: 1.2rem; color: var(--text); }
+    .login-logo-text span { color: var(--green); }
+    .login-title { font-family: var(--font-display); font-size: 2rem; letter-spacing:.04em; color: var(--text); margin-bottom: 4px; }
+    .login-sub { font-size: .85rem; color: var(--text-muted); margin-bottom: 32px; }
+
+    .login-tabs {
+      display: flex; background: var(--surface); border-radius: 8px; padding: 4px; margin-bottom: 28px;
+    }
+    .login-tab {
+      flex: 1; padding: 9px; text-align: center; border-radius: 6px;
+      font-size: .83rem; font-weight: 600; color: var(--text-muted);
+      cursor: pointer; transition: var(--transition); letter-spacing:.02em;
+    }
+    .login-tab.active { background: var(--bg); color: var(--text); }
+
+    .login-panel { display: none; }
+    .login-panel.active { display: block; }
+
+    .input-wrap { position: relative; }
+    .input-wrap .form-control { padding-right: 44px; }
+    .input-wrap .input-icon {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-dim); pointer-events: none;
+      display: flex; align-items: center;
+    }
+    .input-wrap .input-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    .login-cred-hint {
+      background: rgba(74,222,128,0.06);
+      border: 1px solid var(--border-2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      font-size: .78rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .login-cred-hint strong { color: var(--green); font-family: var(--font-mono); }
+
+    .login-error {
+      background: rgba(248,113,113,.08);
+      border: 1px solid rgba(248,113,113,.2);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: var(--red);
+      font-size: .82rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    /* info panel right side */
+    .info-panel { position: relative; z-index: 1; max-width: 400px; }
+    .info-panel h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: .04em; color: var(--text); line-height: 1; margin-bottom: 16px;
+    }
+    .info-panel h2 span { color: var(--green); }
+    .info-panel p { font-size: .9rem; color: var(--text-muted); margin-bottom: 36px; line-height: 1.75; }
+    .info-feature {
+      display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px;
+    }
+    .info-feature-icon {
+      width: 38px; height: 38px;
+      background: rgba(74,222,128,0.1); border: 1px solid var(--border-2); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .info-feature-icon svg { width: 18px; height: 18px; stroke: var(--green); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .info-feature h4 { font-size: .88rem; font-weight: 700; color: var(--text); margin-bottom: 3px; font-family: var(--font-body); letter-spacing: 0; }
+    .info-feature p  { font-size: .8rem; color: var(--text-muted); margin: 0; }
+
+    /* ── DASHBOARD ─────────────────────────────────────────── */
+    #dashScreen { display: none; min-height: 100vh; }
+
+    .dash-navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      height: 60px;
+      background: rgba(12,15,10,.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px;
+      transition: var(--transition);
+    }
+    .dash-nav-left  { display: flex; align-items: center; gap: 24px; }
+    .dash-nav-right { display: flex; align-items: center; gap: 12px; }
+    .dash-logo { display: flex; align-items: center; gap: 10px; }
+    .dash-logo-mark {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: linear-gradient(135deg, var(--green-dim), var(--green));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 1.1rem; color: #0c0f0a;
+    }
+    .dash-logo-text { font-family: var(--font-display); font-size: 1.1rem; color: var(--text); }
+    .dash-logo-text span { color: var(--green); }
+
+    .dash-nav-tabs { display: flex; gap: 2px; }
+    .dash-nav-tab {
+      display: flex; align-items: center; gap: 7px;
+      padding: 7px 14px; border-radius: 8px;
+      font-size: .82rem; font-weight: 500; color: var(--text-muted);
+      cursor: pointer; transition: var(--transition); border: none; background: none;
+    }
+    .dash-nav-tab:hover, .dash-nav-tab.active { background: var(--surface); color: var(--text); }
+    .dash-nav-tab.active { border-bottom: 2px solid var(--green); border-radius: 8px 8px 0 0; }
+    .dash-nav-tab svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    .dash-user-chip {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 40px; padding: 5px 14px 5px 6px;
+      font-size: .82rem; color: var(--text-muted);
+    }
+    .dash-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green-dark), var(--green-dim));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: .85rem; color: #fff;
+    }
+
+    .dash-logout-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 8px;
+      font-size: .82rem; color: var(--text-muted);
+      background: transparent; border: 1px solid var(--border);
+      cursor: pointer; transition: var(--transition);
+    }
+    .dash-logout-btn:hover { border-color: var(--red); color: var(--red); }
+    .dash-logout-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* panels */
+    .dash-body { padding-top: 60px; background: var(--bg); min-height: 100vh; }
+    .dash-panel { display: none; padding: 40px 0; }
+    .dash-panel.active { display: block; }
+
+    /* welcome bar */
+    .welcome-bar {
+      background: linear-gradient(135deg, rgba(74,222,128,0.07), rgba(74,222,128,0.02));
+      border: 1px solid var(--border-2);
+      border-radius: 16px;
+      padding: 28px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
+    }
+    .welcome-name { font-family: var(--font-display); font-size: 1.8rem; color: var(--text); letter-spacing: .04em; margin-bottom: 4px; }
+    .welcome-name span { color: var(--green); }
+    .welcome-meta { font-size: .82rem; color: var(--text-dim); font-family: var(--font-mono); }
+    .welcome-badge {
+      background: rgba(74,222,128,0.1); border: 1px solid var(--border-2);
+      border-radius: 40px; padding: 6px 16px;
+      font-size: .75rem; font-family: var(--font-mono); color: var(--green);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .welcome-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse-dot 2s infinite; }
+
+    /* stat row */
+    .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 32px; }
+    .stat-tile {
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: 14px; padding: 22px 24px;
+      transition: var(--transition);
+    }
+    .stat-tile:hover { border-color: var(--border-2); transform: translateY(-2px); }
+    .stat-tile-num {
+      font-family: var(--font-display); font-size: 2.4rem;
+      color: var(--green); line-height: 1; margin-bottom: 4px;
+    }
+    .stat-tile-label { font-size: .75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; font-weight: 500; }
+
+    /* task list */
+    .task-list { display: flex; flex-direction: column; gap: 14px; }
+    .task-item {
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 24px;
+      display: flex; align-items: flex-start; gap: 18px;
+      transition: var(--transition); cursor: pointer;
+    }
+    .task-item:hover { border-color: var(--border-2); transform: translateX(4px); }
+    .task-item-left { flex: 1; min-width: 0; }
+    .task-item-ward { font-family: var(--font-mono); font-size: .7rem; color: var(--text-dim); letter-spacing: .06em; margin-bottom: 4px; }
+    .task-item-title { font-weight: 700; color: var(--text); font-size: .92rem; margin-bottom: 6px; }
+    .task-item-desc  { font-size: .82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 10px; }
+    .task-item-meta  { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .task-item-date  { font-size: .72rem; color: var(--text-dim); font-family: var(--font-mono); display: flex; align-items: center; gap: 4px; }
+    .task-item-date svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .task-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; }
+
+    .task-done-bar {
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 20px;
+      display: flex; align-items: center; gap: 14px;
+      color: var(--text-muted); font-size: .82rem; opacity: .65;
+    }
+    .task-done-bar svg { width: 16px; height: 16px; stroke: var(--green); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* section heading */
+    .panel-heading {
+      font-family: var(--font-display); font-size: 1.6rem;
+      color: var(--text); letter-spacing: .04em; margin-bottom: 4px;
+    }
+    .panel-sub { font-size: .85rem; color: var(--text-muted); margin-bottom: 24px; }
+
+    /* report form */
+    .report-form-card {
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px;
+    }
+
+    /* profile card */
+    .profile-card {
+      background: var(--glass); border: 1px solid var(--border-2);
+      border-radius: 16px; padding: 32px;
+      display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap;
+    }
+    .profile-avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green-dark), var(--green-dim));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 2.2rem; color: #fff;
+      border: 3px solid rgba(74,222,128,0.3); flex-shrink: 0;
+    }
+    .profile-name { font-family: var(--font-display); font-size: 1.8rem; color: var(--text); letter-spacing: .04em; }
+    .profile-role { font-size: .82rem; color: var(--green); font-family: var(--font-mono); letter-spacing: .06em; margin-bottom: 16px; }
+    .profile-row { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; font-size: .85rem; color: var(--text-muted); }
+    .profile-row svg { width: 14px; height: 14px; stroke: var(--text-dim); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+    /* empty state */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-dim); }
+    .empty-state svg { width: 48px; height: 48px; stroke: var(--text-dim); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; margin: 0 auto 16px; display: block; opacity: .5; }
+    .empty-state p { font-size: .9rem; }
+
+    /* mobile responsive */
+    @media (max-width: 768px) {
+      #loginScreen { flex-direction: column; }
+      .login-split-right { display: none; }
+      .login-split-left { padding: 40px 20px; }
+      .login-card { padding: 32px 24px; }
+      .dash-navbar { padding: 0 16px; }
+      .dash-nav-tabs { display: none; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .welcome-bar { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ LOGIN SCREEN ══════════════════ -->
+<div id="loginScreen">
+
+  <!-- LEFT: login form -->
+  <div class="login-split-left">
+    <div class="login-card">
+
+      <div class="login-logo">
+        <div class="login-logo-mark">K</div>
+        <span class="login-logo-text">KYC<span>.</span></span>
+      </div>
+
+      <div class="login-title">Volunteer Portal</div>
+      <div class="login-sub">Sign in to access your tasks, file reports, and track your impact.</div>
+
+      <!-- credential hint -->
+      <div class="login-cred-hint">
+        Demo credentials:<br>
+        <strong>volunteer@kyc.in</strong> / <strong>kyc2025</strong>
+      </div>
+
+      <div id="loginError" class="login-error"></div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <div class="input-wrap">
+          <input type="email" id="volEmail" class="form-control" placeholder="you@kyc.in" autocomplete="email"/>
+          <span class="input-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrap">
+          <input type="password" id="volPassword" class="form-control" placeholder="••••••••" autocomplete="current-password"/>
+          <span class="input-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+        </div>
+      </div>
+
+      <button id="volLoginBtn" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="handleVolLogin()">
+        Sign In
+        <span id="volLoginSpinner" style="display:none">…</span>
+      </button>
+
+      <p style="margin-top:20px;font-size:.8rem;color:var(--text-dim);text-align:center">
+        Not a volunteer yet?
+        <a href="join.html" style="color:var(--green)">Apply to join KYC</a>
+      </p>
+      <p style="margin-top:8px;font-size:.8rem;color:var(--text-dim);text-align:center">
+        Admin?
+        <a href="admin.html" style="color:var(--amber)">Go to Admin Panel</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- RIGHT: info panel -->
+  <div class="login-split-right">
+    <div class="grid-bg"></div>
+    <div class="info-panel">
+      <div class="section-tag" style="margin-bottom:16px">Volunteer Portal</div>
+      <h2>Your <span>mission</span><br>dashboard.</h2>
+      <p>Track assigned tasks, submit field reports, update completion status, and see your personal impact — all in one place.</p>
+      <div class="info-feature">
+        <div class="info-feature-icon"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><polyline points="9 11 12 14 16 10"/></svg></div>
+        <div><h4>Task Management</h4><p>See all your assigned tasks with ward location, due date, and priority level.</p></div>
+      </div>
+      <div class="info-feature">
+        <div class="info-feature-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <div><h4>Field Reports</h4><p>Submit issue reports directly from the field — location, photo upload, description.</p></div>
+      </div>
+      <div class="info-feature">
+        <div class="info-feature-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div><h4>Impact Tracking</h4><p>See how many tasks you've completed and reports you've filed this season.</p></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /loginScreen -->
+
+
+<!-- ═══════════════════════════ DASHBOARD ═════════════════════ -->
+<div id="dashScreen">
+
+  <!-- NAVBAR -->
+  <div class="dash-navbar" id="dashNav">
+    <div class="dash-nav-left">
+      <div class="dash-logo">
+        <div class="dash-logo-mark">K</div>
+        <span class="dash-logo-text">KYC<span>.</span></span>
+      </div>
+      <nav class="dash-nav-tabs" id="dashTabs">
+        <button class="dash-nav-tab active" data-panel="panelHome" onclick="switchPanel('panelHome',this)">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Overview
+        </button>
+        <button class="dash-nav-tab" data-panel="panelTasks" onclick="switchPanel('panelTasks',this)">
+          <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><polyline points="9 11 12 14 16 10"/></svg>
+          My Tasks
+        </button>
+        <button class="dash-nav-tab" data-panel="panelReport" onclick="switchPanel('panelReport',this)">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          File Report
+        </button>
+        <button class="dash-nav-tab" data-panel="panelProfile" onclick="switchPanel('panelProfile',this)">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Profile
+        </button>
+      </nav>
+    </div>
+    <div class="dash-nav-right">
+      <div class="dash-user-chip">
+        <div class="dash-avatar" id="navAvatar">I</div>
+        <span id="navName">Volunteer</span>
+      </div>
+      <button class="dash-logout-btn" onclick="handleLogout()">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- ── OVERVIEW PANEL ──────────────────────────────────── -->
+    <div class="dash-panel active" id="panelHome">
+      <div class="container">
+
+        <div class="welcome-bar">
+          <div>
+            <div class="welcome-name">Good to see you, <span id="welcomeName">Volunteer</span></div>
+            <div class="welcome-meta" id="welcomeMeta">Ward — · Member since —</div>
+          </div>
+          <div class="welcome-badge"><span class="dot"></span>Active Volunteer</div>
+        </div>
+
+        <!-- stats row -->
+        <div class="stat-row">
+          <div class="stat-tile">
+            <div class="stat-tile-num" id="statDone">0</div>
+            <div class="stat-tile-label">Tasks Completed</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-tile-num" id="statActive">0</div>
+            <div class="stat-tile-label">Tasks Active</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-tile-num" id="statReports">0</div>
+            <div class="stat-tile-label">Reports Filed</div>
+          </div>
+        </div>
+
+        <!-- active tasks preview -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <h2 class="panel-heading" style="margin-bottom:0">Active Tasks</h2>
+          <button class="btn btn-outline btn-sm" onclick="switchPanel('panelTasks',document.querySelector('[data-panel=panelTasks]'))">
+            View All
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+        <div class="task-list" id="overviewTaskList"></div>
+
+      </div>
+    </div>
+
+    <!-- ── MY TASKS PANEL ──────────────────────────────────── -->
+    <div class="dash-panel" id="panelTasks">
+      <div class="container">
+        <h2 class="panel-heading">My Tasks</h2>
+        <p class="panel-sub">All tasks assigned to you. Click a task to see full details or mark it as complete.</p>
+
+        <!-- filter tabs -->
+        <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap">
+          <button class="filter-btn active" data-tf="all"     onclick="filterTasks('all',this)">All</button>
+          <button class="filter-btn"        data-tf="active"  onclick="filterTasks('active',this)">Active</button>
+          <button class="filter-btn"        data-tf="pending" onclick="filterTasks('pending',this)">Pending</button>
+          <button class="filter-btn"        data-tf="done"    onclick="filterTasks('done',this)">Completed</button>
+        </div>
+
+        <div class="task-list" id="fullTaskList"></div>
+      </div>
+    </div>
+
+    <!-- ── FILE REPORT PANEL ───────────────────────────────── -->
+    <div class="dash-panel" id="panelReport">
+      <div class="container" style="max-width:680px">
+        <h2 class="panel-heading">File a Field Report</h2>
+        <p class="panel-sub">Document a sanitation issue you've encountered. Reports are forwarded to the admin team for escalation.</p>
+
+        <div class="report-form-card">
+          <form id="volReportForm" onsubmit="submitVolReport(event)">
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Ward</label>
+                <select class="form-control" name="ward" required>
+                  <option value="">Select Ward</option>
+                  <option>Ward 1</option><option>Ward 2</option><option>Ward 3</option>
+                  <option>Ward 4</option><option>Ward 5</option><option>Ward 6</option>
+                  <option>Ward 7</option><option>Ward 8</option><option>Ward 9</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Issue Type</label>
+                <select class="form-control" name="issueType" required>
+                  <option value="">Select Type</option>
+                  <option>Open Dumping Site</option>
+                  <option>Blocked Drain</option>
+                  <option>No Waste Collection</option>
+                  <option>Overflowing Garbage</option>
+                  <option>Other Sanitation Issue</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Exact Location / Landmark</label>
+              <input type="text" class="form-control" name="location" placeholder="e.g. Near primary school, Ward 3 main road" required/>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Priority</label>
+              <select class="form-control" name="priority" required>
+                <option value="">Select Priority</option>
+                <option value="high">High — needs immediate action</option>
+                <option value="medium">Medium — within this week</option>
+                <option value="low">Low — routine follow-up</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" name="description" rows="4" placeholder="Describe the issue in detail — duration, severity, any previous complaints filed." required minlength="30"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Photo Upload <span style="color:var(--text-dim);font-weight:400">(optional)</span></label>
+              <div style="border:1px dashed var(--border-2);border-radius:8px;padding:24px;text-align:center;background:var(--surface);color:var(--text-dim);font-size:.85rem;cursor:pointer"
+                onclick="document.getElementById('photoInput').click()">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 8px;display:block;opacity:.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                Click to attach a photo
+                <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="previewPhoto(this)"/>
+              </div>
+              <div id="photoPreview" style="display:none;margin-top:12px">
+                <img id="photoImg" style="max-height:160px;border-radius:8px;border:1px solid var(--border)"/>
+              </div>
+            </div>
+
+            <div id="reportSuccess" class="form-success">
+              Report submitted successfully! Reference ID: <strong id="reportRefId"></strong><br>
+              <span style="font-size:.82rem">The admin team will review and escalate within 24 hours.</span>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Submit Report
+            </button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROFILE PANEL ───────────────────────────────────── -->
+    <div class="dash-panel" id="panelProfile">
+      <div class="container" style="max-width:680px">
+        <h2 class="panel-heading">My Profile</h2>
+        <p class="panel-sub">Your volunteer record and current status.</p>
+
+        <div class="profile-card">
+          <div class="profile-avatar" id="profileAvatar">I</div>
+          <div style="flex:1">
+            <div class="profile-name"  id="profileName">Imran Khan</div>
+            <div class="profile-role"  id="profileRole">FIELD VOLUNTEER</div>
+            <div class="profile-row">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span id="profileWard">Ward 3</span>
+            </div>
+            <div class="profile-row">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <span id="profileEmail">volunteer@kyc.in</span>
+            </div>
+            <div class="profile-row">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Member since <span id="profileJoin">Jan 2025</span>
+            </div>
+            <div style="margin-top:20px;display:flex;gap:24px">
+              <div>
+                <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--green)" id="profileDone">0</div>
+                <div style="font-size:.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em">Tasks Done</div>
+              </div>
+              <div>
+                <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--amber)" id="profileReports">0</div>
+                <div style="font-size:.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em">Reports Filed</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;padding:20px 24px;background:var(--glass);border:1px solid var(--border);border-radius:14px">
+          <p style="font-size:.82rem;color:var(--text-muted)">
+            Need to update your details or change ward assignment? Contact the KYC admin team at
+            <a href="mailto:admin@kyc.in" style="color:var(--green)">admin@kyc.in</a>
+          </p>
+        </div>
+
+        <div style="margin-top:16px">
+          <button class="btn btn-outline" onclick="handleLogout()" style="color:var(--red);border-color:rgba(248,113,113,.3)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /dash-body -->
+</div><!-- /dashScreen -->
+
+<script src="auth.js"></script>
+<script>
+'use strict';
+
+let currentUser = null;
+
+/* ── check existing session ──────────────────────────────────── */
+window.addEventListener('DOMContentLoaded', () => {
+  const u = Session.get();
+  if (u && u.role === 'volunteer') { currentUser = DEMO_USERS.find(x => x.id === u.id) || u; showDash(); }
+  else if (u && u.role === 'admin') { window.location.href = 'admin.html'; }
+});
+
+/* ── LOGIN ───────────────────────────────────────────────────── */
+async function handleVolLogin() {
+  const email    = document.getElementById('volEmail').value.trim();
+  const password = document.getElementById('volPassword').value;
+  const errEl    = document.getElementById('loginError');
+  const btn      = document.getElementById('volLoginBtn');
+  errEl.style.display = 'none';
+
+  if (!email || !password) { errEl.textContent = 'Please enter your email and password.'; errEl.style.display = 'block'; return; }
+
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  try {
+    const user = await _mockLogin(email, password);
+    if (user.role === 'admin') { Session.set(user); window.location.href = 'admin.html'; return; }
+    currentUser = DEMO_USERS.find(u => u.id === user.id) || user;
+    Session.set(currentUser);
+    showDash();
+  } catch (e) {
+    errEl.textContent = e.message; errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Sign In';
+  }
+}
+
+/* ── Also trigger login on Enter ─────────────────────────────── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') handleVolLogin();
+});
+
+/* ── SHOW DASHBOARD ──────────────────────────────────────────── */
+function showDash() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashScreen').style.display  = 'block';
+  populateDash();
+}
+
+function populateDash() {
+  const u = currentUser;
+  /* navbar */
+  document.getElementById('navAvatar').textContent = u.avatar;
+  document.getElementById('navName').textContent   = u.name.split(' ')[0];
+  /* welcome */
+  document.getElementById('welcomeName').textContent = u.name.split(' ')[0];
+  document.getElementById('welcomeMeta').textContent = `${u.ward} · Member since ${u.joinDate}`;
+  /* stats */
+  document.getElementById('statDone').textContent    = u.tasksCompleted;
+  document.getElementById('statActive').textContent  = u.tasksActive;
+  document.getElementById('statReports').textContent = u.reportsSubmitted;
+  /* profile */
+  document.getElementById('profileAvatar').textContent = u.avatar;
+  document.getElementById('profileName').textContent   = u.name;
+  document.getElementById('profileRole').textContent   = (u.ward === 'All' ? 'WARD LEAD' : 'FIELD VOLUNTEER');
+  document.getElementById('profileWard').textContent   = u.ward;
+  document.getElementById('profileEmail').textContent  = u.email;
+  document.getElementById('profileJoin').textContent   = u.joinDate;
+  document.getElementById('profileDone').textContent   = u.tasksCompleted;
+  document.getElementById('profileReports').textContent= u.reportsSubmitted;
+
+  renderOverviewTasks();
+  renderFullTasks('all');
+}
+
+/* ── TASKS ───────────────────────────────────────────────────── */
+function myTasks() {
+  return DEMO_TASKS.filter(t => t.volunteer === currentUser.id);
+}
+
+function renderOverviewTasks() {
+  const active = myTasks().filter(t => t.status === 'active' || t.status === 'pending').slice(0, 3);
+  const el = document.getElementById('overviewTaskList');
+  if (!active.length) { el.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><p>No active tasks right now.</p></div>`; return; }
+  el.innerHTML = active.map(t => taskCard(t)).join('');
+}
+
+function renderFullTasks(filter) {
+  const tasks = filter === 'all' ? myTasks() : myTasks().filter(t => t.status === filter);
+  const el = document.getElementById('fullTaskList');
+  if (!tasks.length) { el.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><p>No tasks in this category.</p></div>`; return; }
+  el.innerHTML = tasks.map(t => taskCard(t)).join('');
+}
+
+function taskCard(t) {
+  const isDone = t.status === 'done';
+  return `
+  <div class="task-item ${isDone ? 'task-done-bar' : ''}" onclick="viewTask('${t.id}')">
+    ${isDone
+      ? `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+         <div><strong style="color:var(--text);font-size:.88rem">${t.area}</strong> — <span style="font-size:.82rem;color:var(--text-muted)">${t.type}</span>
+         &nbsp;<span style="font-size:.75rem;color:var(--text-dim);font-family:var(--font-mono)">Completed ${t.completedOn}</span></div>`
+      : `<div class="task-item-left">
+           <div class="task-item-ward">${t.area}</div>
+           <div class="task-item-title">${t.type}</div>
+           <div class="task-item-desc">${t.description}</div>
+           <div class="task-item-meta">
+             ${badge(t.status)} ${priorityBadge(t.priority)}
+             <span class="task-item-date"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Due ${t.dueDate}</span>
+           </div>
+         </div>
+         <div class="task-item-right">
+           <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();markDone('${t.id}')">Mark Done</button>
+           <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();viewTask('${t.id}')">Details</button>
+         </div>`
+    }
+  </div>`;
+}
+
+function filterTasks(val, btn) {
+  document.querySelectorAll('[data-tf]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderFullTasks(val);
+}
+
+function viewTask(id) {
+  const t = DEMO_TASKS.find(x => x.id === id); if (!t) return;
+  showModal(`Task — ${t.id}`, `
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="background:var(--surface);border-radius:10px;padding:16px">
+        <div style="font-size:.7rem;font-family:var(--font-mono);color:var(--text-dim);margin-bottom:6px">LOCATION</div>
+        <div style="color:var(--text);font-size:.9rem">${t.area}</div>
+      </div>
+      <div style="background:var(--surface);border-radius:10px;padding:16px">
+        <div style="font-size:.7rem;font-family:var(--font-mono);color:var(--text-dim);margin-bottom:6px">DESCRIPTION</div>
+        <div style="color:var(--text-muted);font-size:.88rem;line-height:1.7">${t.description}</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div style="flex:1;background:var(--surface);border-radius:10px;padding:12px 16px">
+          <div style="font-size:.7rem;font-family:var(--font-mono);color:var(--text-dim);margin-bottom:4px">STATUS</div>
+          ${badge(t.status)}
+        </div>
+        <div style="flex:1;background:var(--surface);border-radius:10px;padding:12px 16px">
+          <div style="font-size:.7rem;font-family:var(--font-mono);color:var(--text-dim);margin-bottom:4px">PRIORITY</div>
+          ${priorityBadge(t.priority)}
+        </div>
+        <div style="flex:1;background:var(--surface);border-radius:10px;padding:12px 16px">
+          <div style="font-size:.7rem;font-family:var(--font-mono);color:var(--text-dim);margin-bottom:4px">DUE DATE</div>
+          <div style="color:var(--text);font-size:.85rem">${t.dueDate}</div>
+        </div>
+      </div>
+    </div>`,
+    t.status !== 'done'
+      ? `<button class="btn btn-outline btn-sm" onclick="document.getElementById('p-modal-overlay').remove()">Close</button>
+         <button class="btn btn-primary btn-sm" onclick="document.getElementById('p-modal-overlay').remove();markDone('${t.id}')">Mark as Complete</button>`
+      : `<button class="btn btn-outline btn-sm" onclick="document.getElementById('p-modal-overlay').remove()">Close</button>`
+  );
+}
+
+function markDone(id) {
+  const t = DEMO_TASKS.find(x => x.id === id); if (!t || t.status === 'done') return;
+  confirm(`Mark task in <strong>${t.area}</strong> as completed?`, () => {
+    t.status = 'done';
+    t.completedOn = new Date().toISOString().split('T')[0];
+    currentUser.tasksCompleted++;
+    currentUser.tasksActive = Math.max(0, currentUser.tasksActive - 1);
+    document.getElementById('statDone').textContent   = currentUser.tasksCompleted;
+    document.getElementById('statActive').textContent = currentUser.tasksActive;
+    document.getElementById('profileDone').textContent= currentUser.tasksCompleted;
+    renderOverviewTasks();
+    renderFullTasks(document.querySelector('[data-tf].active')?.dataset.tf || 'all');
+    toast('Task marked as complete!', 'success');
+  });
+}
+
+/* ── REPORT FORM ─────────────────────────────────────────────── */
+function submitVolReport(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('[type=submit]');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  setTimeout(() => {
+    const refId = 'KYC-' + Math.floor(Math.random() * 9000 + 1000);
+    currentUser.reportsSubmitted++;
+    document.getElementById('statReports').textContent   = currentUser.reportsSubmitted;
+    document.getElementById('profileReports').textContent= currentUser.reportsSubmitted;
+    document.getElementById('reportRefId').textContent   = refId;
+    document.getElementById('reportSuccess').classList.add('visible');
+    e.target.reset();
+    document.getElementById('photoPreview').style.display = 'none';
+    btn.disabled = false; btn.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Submit Report`;
+    toast(`Report ${refId} submitted!`, 'success');
+    setTimeout(() => document.getElementById('reportSuccess').classList.remove('visible'), 6000);
+  }, 1000);
+}
+
+/* ── PHOTO PREVIEW ───────────────────────────────────────────── */
+function previewPhoto(input) {
+  if (!input.files?.[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('photoImg').src = e.target.result;
+    document.getElementById('photoPreview').style.display = 'block';
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+/* ── PANEL SWITCHING ─────────────────────────────────────────── */
+function switchPanel(panelId, btn) {
+  document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.dash-nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+/* ── LOGOUT ──────────────────────────────────────────────────── */
+async function handleLogout() {
+  await _mockLogout();
+  document.getElementById('dashScreen').style.display  = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  currentUser = null;
+  toast('Signed out successfully.', 'info');
+}
+</script>
+</body>
+</html>
