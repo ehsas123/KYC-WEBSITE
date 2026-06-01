@@ -59,64 +59,64 @@ async function fetchComplaints(wardId) {
 const activities = [
   {
     id: 1,
-    tag: 'Cleanliness Drive',
-    photo: '/assets/activities/market-cleanup-drive.png',
+    tag: 'Sanitation Complaint',
+    photo: '/assets/activities/W9-SANITATION.png',
     photoAlt: 'Volunteers picking up trash during a community cleanup drive',
-    title: 'Ward 3 Market Cleanup',
-    desc: 'Volunteers mobilized for a comprehensive cleanup of the main market area, removing accumulated waste and clearing blocked drains.',
-    date: 'July 28, 2026',
+    title: 'Ward 9 Sanitation Complaint',
+    desc: 'Escalated 1 sanitation complaints through official grievance portals, resolutions within 2 hours of filing.',
+    date: 'May 16, 2026',
     status: 'done'
   },
-  {
-    id: 2,
-    tag: 'Awareness Campaign',
-    photo: '/assets/activities/waste-collection.png',
-    photoAlt: 'Youth volunteers knocking on doors during an awareness campaign',
-    title: 'Door-to-Door Waste Segregation Drive',
-    desc: 'Team visited 200+ households educating residents on wet vs dry waste segregation with live demonstrations and printed guides.',
-    date: 'August 5, 2026',
-    status: 'active'
-  },
-  {
-    id: 3,
-    tag: 'Ward Inspection',
-    photo: '/assets/activities/ward-inspection.png',
-    photoAlt: 'Volunteer documenting a garbage pile in a neglected street',
-    title: 'Ward 7 Sanitation Audit',
-    desc: 'Documented 14 critical sanitation failure points in Ward 7 with photographic evidence and GPS coordinates for official filing.',
-    date: 'August 12, 2026',
-    status: 'active'
-  },
-  {
-    id: 4,
-    tag: 'Community Mobilization',
-    photo: '/assets/activities/community-mobilization.png',
-    photoAlt: 'Community members and shopkeepers gathering for a cleanliness pledge',
-    title: 'Shopkeeper Responsibility Pledge',
-    desc: 'Over 60 shopkeepers across 3 markets signed a cleanliness pledge, committing to daily waste disposal practices on their premises.',
-    date: 'August 18, 2025',
-    status: 'done'
-  },
-  {
-    id: 5,
-    tag: 'System Activation',
-    photo: '/assets/activities/system-activation.png',
-    photoAlt: 'Volunteers at a meeting escalating complaints to local authorities',
-    title: 'Nagar Parishad Complaint Follow-Up',
-    desc: 'Escalated 8 pending sanitation complaints through official grievance portals, resulting in 5 resolutions within 72 hours of filing.',
-    date: 'September 1, 2025',
-    status: 'active'
-  },
-  {
-    id: 6,
-    tag: 'Student Drive',
-    photo: '/assets/activities/student-drive.png',
-    photoAlt: 'Young students participating in a hygiene awareness session at school',
-    title: 'School Hygiene Awareness Program',
-    desc: 'Conducted hygiene awareness sessions in 3 local schools, engaging 400+ students and distributing waste segregation kits.',
-    date: 'September 15, 2025',
-    status: 'upcoming'
-  }
+  // {
+  //   id: 2,
+  //   tag: 'Awareness Campaign',
+  //   photo: '/assets/activities/waste-collection.png',
+  //   photoAlt: 'Youth volunteers knocking on doors during an awareness campaign',
+  //   title: 'Door-to-Door Waste Segregation Drive',
+  //   desc: 'Team visited 200+ households educating residents on wet vs dry waste segregation with live demonstrations and printed guides.',
+  //   date: 'August 5, 2026',
+  //   status: 'active'
+  // },
+  // {
+  //   id: 3,
+  //   tag: 'Ward Inspection',
+  //   photo: '/assets/activities/ward-inspection.png',
+  //   photoAlt: 'Volunteer documenting a garbage pile in a neglected street',
+  //   title: 'Ward 7 Sanitation Audit',
+  //   desc: 'Documented 14 critical sanitation failure points in Ward 7 with photographic evidence and GPS coordinates for official filing.',
+  //   date: 'August 12, 2026',
+  //   status: 'active'
+  // },
+  // {
+  //   id: 4,
+  //   tag: 'Community Mobilization',
+  //   photo: '/assets/activities/community-mobilization.png',
+  //   photoAlt: 'Community members and shopkeepers gathering for a cleanliness pledge',
+  //   title: 'Shopkeeper Responsibility Pledge',
+  //   desc: 'Over 60 shopkeepers across 3 markets signed a cleanliness pledge, committing to daily waste disposal practices on their premises.',
+  //   date: 'August 18, 2025',
+  //   status: 'done'
+  // },
+  // {
+  //   id: 5,
+  //   tag: 'System Activation',
+  //   photo: '/assets/activities/system-activation.png',
+  //   photoAlt: 'Volunteers at a meeting escalating complaints to local authorities',
+  //   title: 'Nagar Parishad Complaint Follow-Up',
+  //   desc: 'Escalated 8 pending sanitation complaints through official grievance portals, resulting in 5 resolutions within 72 hours of filing.',
+  //   date: 'September 1, 2025',
+  //   status: 'active'
+  // },
+  // {
+  //   id: 6,
+  //   tag: 'Student Drive',
+  //   photo: '/assets/activities/student-drive.png',
+  //   photoAlt: 'Young students participating in a hygiene awareness session at school',
+  //   title: 'School Hygiene Awareness Program',
+  //   desc: 'Conducted hygiene awareness sessions in 3 local schools, engaging 400+ students and distributing waste segregation kits.',
+  //   date: 'September 15, 2025',
+  //   status: 'upcoming'
+  // }
 ];
 
 /* ── Testimonials Data ──────────────────────────────────────── */
