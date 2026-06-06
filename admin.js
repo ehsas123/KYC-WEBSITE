@@ -1,5 +1,7 @@
 import { db } from './firebase-config.js';
 import { doc, setDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { auth } from './firebase-config.js';
 
 // Saved list of complaints
 let complaintsCache = [];
@@ -15,20 +17,35 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    if (sessionStorage.getItem("kycAdminSessionToken") === "authenticated_verified") {
-        showMainDashboard();
-    } else {
-        document.getElementById("adminAuthGate").style.display = "flex";
-        document.getElementById("adminMainSystem").style.display = "none";
-    }
+    // Firebase Auth state listener — single source of truth for login state
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            showMainDashboard(user);
+        } else {
+            document.getElementById("adminAuthGate").style.display = "flex";
+            document.getElementById("adminMainSystem").style.display = "none";
+        }
+    });
 });
+
+// ================= PASSWORD EYE TOGGLE =================
+window.togglePasswordView = function() {
+    const pwInput = document.getElementById("authPassword");
+    const eyeIcon = document.getElementById("pwEyeIcon");
+    if (pwInput.type === "password") {
+        pwInput.type = "text";
+        eyeIcon.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+        pwInput.type = "password";
+        eyeIcon.classList.replace("fa-eye-slash", "fa-eye");
+    }
+};
 
 // ================= DYNAMIC THEME TOGGLE CONTROLLER =================
 window.toggleInterfaceTheme = function() {
     const toggleBtn = document.getElementById("theme-toggle-btn");
     
     if (document.body.classList.contains("light-mode-active")) {
-        // Switch to Dark Space Mode
         document.body.classList.remove("light-mode-active");
         localStorage.setItem("kycAdminThemeStyle", "dark-space-mode");
         if (toggleBtn) {
@@ -36,7 +53,6 @@ window.toggleInterfaceTheme = function() {
         }
         showToast("Switched to Night Mode");
     } else {
-        // Switch to Day Light Mode
         document.body.classList.add("light-mode-active");
         localStorage.setItem("kycAdminThemeStyle", "light-day-mode");
         if (toggleBtn) {
@@ -46,35 +62,67 @@ window.toggleInterfaceTheme = function() {
     }
 };
 
-// ================= ADMIN LOGIN / LOGOUT =================
-window.handleAdminLogin = function(event) {
+// ================= FIREBASE AUTH LOGIN =================
+window.handleAdminLogin = async function(event) {
     event.preventDefault();
-    const usernameInput = document.getElementById("authUsername").value.trim();
-    const passwordInput = document.getElementById("authPassword").value.trim();
-    const errorDisplay = document.getElementById("authError");
 
-    if (usernameInput === "admin" && passwordInput === "Kishanganj@2026") {
-        sessionStorage.setItem("kycAdminSessionToken", "authenticated_verified");
-        errorDisplay.innerText = "";
+    const emailInput    = document.getElementById("authUsername").value.trim();
+    const passwordInput = document.getElementById("authPassword").value.trim();
+    const errorDisplay  = document.getElementById("authError");
+    const submitBtn     = document.getElementById("loginSubmitBtn");
+    const btnText       = document.getElementById("loginBtnText");
+    const btnLoader     = document.getElementById("loginBtnLoader");
+
+    // Show loading state
+    submitBtn.disabled = true;
+    btnText.style.display  = "none";
+    btnLoader.style.display = "inline-flex";
+    errorDisplay.innerText = "";
+
+    try {
+        await signInWithEmailAndPassword(auth, emailInput, passwordInput);
+        // onAuthStateChanged will handle the rest automatically
         showToast("Login Successful! Opening Admin Panel...");
-        showMainDashboard();
-    } else {
-        errorDisplay.innerText = "Error: Invalid username or password.";
+    } catch (error) {
+        // Map Firebase error codes to friendly messages
+        let friendlyMsg = "Invalid email or password. Please try again.";
+        if (error.code === "auth/user-not-found")       friendlyMsg = "No account found with this email.";
+        if (error.code === "auth/wrong-password")       friendlyMsg = "Incorrect password. Please try again.";
+        if (error.code === "auth/invalid-email")        friendlyMsg = "Please enter a valid email address.";
+        if (error.code === "auth/too-many-requests")    friendlyMsg = "Too many failed attempts. Please try later.";
+        if (error.code === "auth/network-request-failed") friendlyMsg = "Network error. Check your connection.";
+
+        errorDisplay.innerText = "⚠ " + friendlyMsg;
         errorDisplay.style.color = "#ef4444";
+    } finally {
+        // Restore button state
+        submitBtn.disabled = false;
+        btnText.style.display  = "inline-flex";
+        btnLoader.style.display = "none";
     }
 };
 
-window.handleAdminLogout = function() {
-    sessionStorage.removeItem("kycAdminSessionToken");
-    showToast("Logged out successfully.");
-    setTimeout(() => {
-        window.location.reload();
-    }, 1000);
+// ================= FIREBASE AUTH LOGOUT =================
+window.handleAdminLogout = async function() {
+    try {
+        await signOut(auth);
+        showToast("Logged out successfully.");
+        // onAuthStateChanged will redirect to auth gate automatically
+    } catch (error) {
+        console.error("Logout error:", error);
+    }
 };
 
-function showMainDashboard() {
+function showMainDashboard(user) {
     document.getElementById("adminAuthGate").style.display = "none";
     document.getElementById("adminMainSystem").style.display = "flex";
+
+    // Show the logged-in admin's email in the sidebar chip
+    const emailDisplay = document.getElementById("adminEmailDisplay");
+    if (emailDisplay && user) {
+        emailDisplay.innerText = user.email;
+    }
+
     loadAllComplaints();
 }
 
@@ -89,7 +137,7 @@ window.switchView = function(viewName) {
     document.querySelectorAll('.admin-view').forEach(view => view.style.display = 'none');
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
     
-    const targetView = document.getElementById(`view-${viewName}`);
+    const targetView    = document.getElementById(`view-${viewName}`);
     const targetNavLink = document.getElementById(`link-${viewName}`);
     
     if (targetView) targetView.style.display = 'block';
@@ -119,12 +167,12 @@ async function loadAllComplaints() {
         querySnapshot.forEach((docSnap) => {
             const data = docSnap.data();
             const complaintObject = {
-                id: docSnap.id,
-                status: data.status ? data.status.toLowerCase() : 'received',
-                location: data.location || 'Not Provided',
-                issue: data.issue || 'General Issue',
-                remarks: data.remarks || 'No remarks added yet',
-                date: data.date || new Date().toLocaleDateString('en-GB')
+                id:      docSnap.id,
+                status:  data.status ? data.status.toLowerCase() : 'received',
+                location:data.location || 'Not Provided',
+                issue:   data.issue    || 'General Issue',
+                remarks: data.remarks  || 'No remarks added yet',
+                date:    data.date     || new Date().toLocaleDateString('en-GB')
             };
             complaintsCache.push(complaintObject);
         });
@@ -157,19 +205,19 @@ async function loadAllComplaints() {
 window.sendToEditForm = function(id, status, loc, iss, rem) {
     switchView('modify');
     document.getElementById("adminComplaintId").value = id;
-    document.getElementById("adminStatus").value = status;
-    document.getElementById("adminLocation").value = loc;
-    document.getElementById("adminIssue").value = iss;
-    document.getElementById("adminRemarks").value = rem;
+    document.getElementById("adminStatus").value      = status;
+    document.getElementById("adminLocation").value    = loc;
+    document.getElementById("adminIssue").value       = iss;
+    document.getElementById("adminRemarks").value     = rem;
 };
 
 // ================= CREATE OR UPDATE MANUAL DATA =================
 window.updateManualData = async function() {
-    const complaintId = document.getElementById("adminComplaintId").value.trim();
+    const complaintId   = document.getElementById("adminComplaintId").value.trim();
     const currentStatus = document.getElementById("adminStatus").value;
-    const itemLocation = document.getElementById("adminLocation").value;
-    const itemIssue = document.getElementById("adminIssue").value;
-    const adminRemarks = document.getElementById("adminRemarks").value.trim();
+    const itemLocation  = document.getElementById("adminLocation").value;
+    const itemIssue     = document.getElementById("adminIssue").value;
+    const adminRemarks  = document.getElementById("adminRemarks").value.trim();
     const feedbackMessage = document.getElementById("updateMsg");
 
     if (!complaintId) {
@@ -178,25 +226,25 @@ window.updateManualData = async function() {
     }
 
     const simpleDataObj = {
-        status: currentStatus,
+        status:   currentStatus,
         location: itemLocation || "Kishanganj Hub",
-        issue: itemIssue || "General Civic Complaint",
-        remarks: adminRemarks || "Status updated by Admin.",
-        date: new Date().toLocaleDateString('en-GB')
+        issue:    itemIssue    || "General Civic Complaint",
+        remarks:  adminRemarks || "Status updated by Admin.",
+        date:     new Date().toLocaleDateString('en-GB')
     };
 
     try {
         feedbackMessage.style.color = "var(--accent-primary)";
-        feedbackMessage.innerText = "Saving data to your database...";
+        feedbackMessage.innerText   = "Saving data to your database...";
 
         await setDoc(doc(db, "complaints", complaintId), simpleDataObj, { merge: true });
         
         showToast(`Complaint ${complaintId} successfully saved!`);
         
         document.getElementById("adminComplaintId").value = "";
-        document.getElementById("adminLocation").value = "";
-        document.getElementById("adminIssue").value = "";
-        document.getElementById("adminRemarks").value = "";
+        document.getElementById("adminLocation").value    = "";
+        document.getElementById("adminIssue").value       = "";
+        document.getElementById("adminRemarks").value     = "";
         feedbackMessage.innerText = "";
 
         switchView('dashboard');
@@ -204,14 +252,14 @@ window.updateManualData = async function() {
     } catch (error) {
         console.error("Database save error:", error);
         feedbackMessage.style.color = "var(--state-escalated)";
-        feedbackMessage.innerText = "Error saving data. Check your connection.";
+        feedbackMessage.innerText   = "Error saving data. Check your connection.";
     }
 };
 
 // ================= CALCULATE ACTUAL NUMBERS =================
 function updateNumbersDisplay() {
-    let totalCount = complaintsCache.length;
-    let activeCount = 0;
+    let totalCount    = complaintsCache.length;
+    let activeCount   = 0;
     let resolvedCount = 0;
 
     complaintsCache.forEach(item => {
@@ -222,8 +270,8 @@ function updateNumbersDisplay() {
         }
     });
 
-    document.getElementById("statTotal").innerText = totalCount;
-    document.getElementById("statActive").innerText = activeCount;
+    document.getElementById("statTotal").innerText    = totalCount;
+    document.getElementById("statActive").innerText   = activeCount;
     document.getElementById("statResolved").innerText = resolvedCount;
 }
 
@@ -243,7 +291,7 @@ function renderActivityLogTable(dataList) {
             <tr>
                 <td><small class="activity-date-text">${item.date}</small></td>
                 <td><span class="activity-id-text">${item.id}</span></td>
-                <td>Moved to status ➔ <span class="badge ${item.status}" style="font-size:0.7rem; padding:0.15rem 0.4rem;">${item.status}</span></td>
+                <td>Moved to status ➔ <span class="badge ${item.status}" style="font-size:0.68rem; padding:0.12rem 0.4rem;">${item.status}</span></td>
                 <td><span style="color: var(--text-muted); font-size:0.85rem;">${item.remarks}</span></td>
             </tr>`;
         logTableBody.innerHTML += itemRow;
@@ -252,15 +300,14 @@ function renderActivityLogTable(dataList) {
 
 // ================= SEARCH AND FILTER LOGIC =================
 window.filterActivityLog = function() {
-    const searchText = document.getElementById("logSearch").value.toLowerCase();
-    const dropdownFilter = document.getElementById("logFilterStatus").value;
+    const searchText      = document.getElementById("logSearch").value.toLowerCase();
+    const dropdownFilter  = document.getElementById("logFilterStatus").value;
 
     const finalFilteredList = complaintsCache.filter(item => {
         const matchesSearch = item.id.toLowerCase().includes(searchText) || 
                               item.location.toLowerCase().includes(searchText) || 
                               item.issue.toLowerCase().includes(searchText) ||
                               item.remarks.toLowerCase().includes(searchText);
-                              
         const matchesDropdownStatus = (dropdownFilter === 'all') || (item.status === dropdownFilter);
         return matchesSearch && matchesDropdownStatus;
     });
@@ -270,12 +317,10 @@ window.filterActivityLog = function() {
 
 window.showToast = function(message) {
     const toastBox = document.getElementById("toast");
-    if(!toastBox) return;
+    if (!toastBox) return;
     toastBox.innerText = message;
     toastBox.style.right = "2.5rem";
-    setTimeout(() => {
-        toastBox.style.right = "-450px";
-    }, 4000);
+    setTimeout(() => { toastBox.style.right = "-450px"; }, 4000);
 };
 
 function escapeText(str) {

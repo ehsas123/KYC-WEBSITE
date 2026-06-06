@@ -3,41 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KYC Admin Dashboard | Mission Clean City</title>
+    <title>KYC Admin Hub | Kishanganj Youth Club</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="admin.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700&family=Poppins:wght=500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="admin-body">
 
+    <!-- ===== LOGIN GATE ===== -->
     <div id="adminAuthGate" class="auth-overlay">
-        <div class="card auth-card">
+        <div class="auth-bg-rings">
+            <span></span><span></span><span></span>
+        </div>
+        <div class="auth-card">
             <div class="auth-header">
-                <div class="brand-logo-container">
-                    <img src="assets/logo.png" alt="Kishanganj Youth Club Logo" class="admin-brand-img">
+                <div class="auth-logo-ring">
+                    <img src="assets/logo.png" alt="KYC Logo" class="auth-logo-img">
                 </div>
-                <span>Admin Login</span>
+                <h2 class="auth-title">Admin Portal</h2>
+                <p class="auth-subtitle">Kishanganj Youth Club — Mission Clean City</p>
             </div>
             <form id="authForm" onsubmit="handleAdminLogin(event)">
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="authUsername" placeholder="Enter admin username" required>
+                    <label><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="authUsername" placeholder="admin@example.com" required autocomplete="email">
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="authPassword" placeholder="••••••••" required>
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <div class="input-password-wrap">
+                        <input type="password" id="authPassword" placeholder="••••••••••" required autocomplete="current-password">
+                        <button type="button" class="pw-toggle-btn" onclick="togglePasswordView()"><i class="fas fa-eye" id="pwEyeIcon"></i></button>
+                    </div>
                 </div>
-                <button type="submit" class="btn-submit">
-                    <i class="fas fa-key"></i> Log In
+                <button type="submit" class="btn-login" id="loginSubmitBtn">
+                    <span id="loginBtnText"><i class="fas fa-shield-alt"></i> Secure Sign In</span>
+                    <span id="loginBtnLoader" style="display:none;"><i class="fas fa-circle-notch fa-spin"></i> Verifying...</span>
                 </button>
                 <p id="authError" class="auth-error-msg"></p>
             </form>
+            <div class="auth-footer-note">
+                <i class="fas fa-lock"></i> Secured by Firebase Authentication
+            </div>
         </div>
     </div>
 
+    <!-- ===== MAIN SYSTEM ===== -->
     <div id="adminMainSystem" class="portal-wrapper" style="display: none;">
-        
+
         <aside class="sidebar">
             <div class="sidebar-brand">
                 <div class="brand-logo-container">
@@ -59,15 +72,22 @@
                 <a href="#" class="nav-item logout-btn" onclick="handleAdminLogout()">
                     <i class="fas fa-power-off"></i> <span>Log Out</span>
                 </a>
-                
                 <button type="button" id="theme-toggle-btn" class="nav-item mode-toggle-button" onclick="toggleInterfaceTheme()">
                     <i class="fas fa-sun"></i> <span>Day / Light Mode</span>
                 </button>
             </nav>
+            <div class="sidebar-admin-chip">
+                <div class="admin-chip-avatar"><i class="fas fa-user-shield"></i></div>
+                <div class="admin-chip-info">
+                    <span class="chip-label">Logged In As</span>
+                    <span class="chip-email" id="adminEmailDisplay">—</span>
+                </div>
+            </div>
         </aside>
 
         <main class="main-content">
-            
+
+            <!-- Dashboard View -->
             <section id="view-dashboard" class="admin-view">
                 <div class="view-header">
                     <div>
@@ -78,16 +98,25 @@
 
                 <div class="stats-ribbon-grid">
                     <div class="card stat-card" style="--card-accent: #3b82f6;">
-                        <h3>Total Complaints</h3>
-                        <h2 id="statTotal">0</h2>
+                        <div class="stat-icon" style="background: rgba(59,130,246,0.12); color:#3b82f6;"><i class="fas fa-inbox"></i></div>
+                        <div>
+                            <h3>Total Complaints</h3>
+                            <h2 id="statTotal">0</h2>
+                        </div>
                     </div>
                     <div class="card stat-card" style="--card-accent: #f59e0b;">
-                        <h3>Active & Pending</h3>
-                        <h2 id="statActive">0</h2>
+                        <div class="stat-icon" style="background: rgba(245,158,11,0.12); color:#f59e0b;"><i class="fas fa-clock"></i></div>
+                        <div>
+                            <h3>Active & Pending</h3>
+                            <h2 id="statActive">0</h2>
+                        </div>
                     </div>
                     <div class="card stat-card" style="--card-accent: #10b981;">
-                        <h3>Resolved Work</h3>
-                        <h2 id="statResolved">0</h2>
+                        <div class="stat-icon" style="background: rgba(16,185,129,0.12); color:#10b981;"><i class="fas fa-check-circle"></i></div>
+                        <div>
+                            <h3>Resolved Work</h3>
+                            <h2 id="statResolved">0</h2>
+                        </div>
                     </div>
                 </div>
 
@@ -107,9 +136,7 @@
                                 </tr>
                             </thead>
                             <tbody id="previewTableBody">
-                                <tr>
-                                    <td colspan="5" class="placeholder"><i class="fas fa-spinner fa-spin"></i> Loading complaints...</td>
-                                </tr>
+                                <tr><td colspan="5" class="placeholder"><i class="fas fa-spinner fa-spin"></i> Loading complaints...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -142,15 +169,14 @@
                                 </tr>
                             </thead>
                             <tbody id="activityLogTableBody">
-                                <tr>
-                                    <td colspan="4" class="placeholder">No complaints match your search filter.</td>
-                                </tr>
+                                <tr><td colspan="4" class="placeholder">No complaints match your search filter.</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </section>
 
+            <!-- Modify View -->
             <section id="view-modify" class="admin-view" style="display:none;">
                 <div class="view-header">
                     <div>

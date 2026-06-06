@@ -1,8 +1,7 @@
-// firebase-config.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// PASTE YOUR ACTUAL CONFIG FROM STEP 3 HERE:
 const firebaseConfig = {
   apiKey: "AIzaSyDdHeU5NQvq5qsIAJWOwkJjGZVvFmhHvng",
   authDomain: "mission-clean-city.firebaseapp.com",
@@ -13,8 +12,8 @@ const firebaseConfig = {
 };
 
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-// This 'db' variable is what we will use to save/load complaints
-export const db = getFirestore(app);
+export { db, auth };

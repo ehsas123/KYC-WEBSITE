@@ -1987,3 +1987,131 @@ select.form-control { cursor: pointer; }
   align-items: center;
   gap: 12px;             /* Logo aur KISHANGANJ YOUTH CLUB text me perfect gap */
 }
+
+
+
+
+ /* <!-- ─────────────────────────────── LAUNCHING TIMER ──────────────────── --> */
+
+/* ── LAUNCHING TIMER OVERLAY GLOBAL STYLES ── */
+/* .launch-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #070a13; Deep Dark Space background
+    z-index: 99999; Kisi bhi element ke upar dikhega
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+} */
+
+/* .launch-glow {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+} */
+
+/* .launch-container {
+    text-align: center;
+    padding: 2.5rem;
+    max-width: 650px;
+    width: 90%;
+    background: rgba(15, 23, 42, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+} */
+
+/* .launch-brand {
+    margin-bottom: 2rem;
+} */
+
+/* .launch-logo {
+    max-height: 60px;
+    margin-bottom: 0.5rem;
+}
+
+.launch-brand h2 {
+    font-size: 1rem;
+    color: #f3f4f6;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.launch-brand h2 span {
+    color: #10b981;
+}
+
+.launch-container h1 {
+    font-size: 2.2rem;
+    color: #ffffff;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+}
+
+.launch-subtitle {
+    color: #9ca3af;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+} */
+
+/* Countdown Grid System */
+/* .countdown-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+} */
+
+/* .countdown-box {
+    background: rgba(7, 10, 18, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 1.25rem 0;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+} */
+
+/* .countdown-box span {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #10b981; Premium Green Counter
+    line-height: 1;
+    margin-bottom: 0.5rem;
+} */
+
+/* .countdown-box label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #9ca3af;
+    letter-spacing: 1px;
+    font-weight: 600;
+} */
+
+/* .launch-footer {
+    font-size: 0.8rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+} */
+
+/* Mobile Responsiveness */
+/* @media (max-width: 500px) {
+    .launch-container { padding: 1.5rem; }
+    .launch-container h1 { font-size: 1.6rem; }
+    .countdown-box span { font-size: 1.8rem; }
+    .countdown-box label { font-size: 0.65rem; }
+} */

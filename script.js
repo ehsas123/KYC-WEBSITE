@@ -584,3 +584,35 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+
+//  <!-- ─────────────────────────────── LAUNCHING TIMER ──────────────────── -->
+
+// ====== CONFIGURATION: APNI LAUNCH DATE YAHAN SET KAREIN ======
+// Format: "Month Day, Year Hours:Minutes:Seconds"
+// const launchDate = new Date("Jun 15, 2026 12:00:00").getTime();
+
+// const countdownInterval = setInterval(() => {
+//     const currentTime = new Date().getTime();
+//     const timeDifference = launchDate - currentTime;
+
+    // Time calculations for days, hours, minutes and seconds
+    // const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    // const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    // const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    // const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+    // DOM me values display karna (Zero padding ke saath)
+    // document.getElementById("timer-days").innerText = days < 10 ? "0" + days : days;
+    // document.getElementById("timer-hours").innerText = hours < 10 ? "0" + hours : hours;
+    // document.getElementById("timer-minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+    // document.getElementById("timer-seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+
+    // Agar countdown khatam ho jaye toh overlay ko automatic gayab kar do
+//     if (timeDifference < 0) {
+//         clearInterval(countdownInterval);
+//         const overlay = document.getElementById("launch-overlay");
+//         if (overlay) {
+//             overlay.style.display = "none"; // Website automatically unlocks!
+//         }
+//     }
+// }, 1000);
