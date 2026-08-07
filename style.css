@@ -1801,14 +1801,14 @@ select.form-control { cursor: pointer; }
 /* ── Full team page grid ────────────────────────────────────── */
 .photo-grid-full {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
 
 /* ── Home page team preview (3 cards row) ───────────────────── */
 .photo-grid-home {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
   margin-top: 40px;
 }
@@ -1966,9 +1966,9 @@ select.form-control { cursor: pointer; }
   .photo-grid-full  { grid-template-columns: repeat(2, 1fr); }
   .photo-grid-home  { grid-template-columns: repeat(2, 1fr); }
 }
-@media (max-width: 560px) {
-  .photo-grid-full  { grid-template-columns: 1fr; }
-  .photo-grid-home  { grid-template-columns: 1fr; }
+@media (max-width: 600px) {
+  .photo-grid-full  { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;}
+  .photo-grid-home  { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;}
 }
 
 /* ── NAVBAR LOGO IMAGE STYLING ── */
@@ -2116,3 +2116,116 @@ select.form-control { cursor: pointer; }
     .countdown-box label { font-size: 0.65rem; }
 } */
 
+/* ============================================================
+   TEAM PHOTO CARDS — MOBILE FINAL FIX
+   2 cards per row + clean information card
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+  /* 2 cards in one row */
+  .photo-grid-full,
+  .photo-grid-home {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  /* Keep card inside its column */
+  .photo-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    border-radius: 4px !important;
+  }
+
+  /* Mobile photo size */
+  .photo-card__img {
+    width: 100% !important;
+    aspect-ratio: 3 / 4 !important;
+    object-fit: cover !important;
+    object-position: top center !important;
+  }
+
+  /* Information section */
+  .photo-card__info {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 12px 10px 13px !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+
+    gap: 6px !important;
+  }
+
+  /* Name + role container */
+  .photo-card__text {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: 0 !important;
+  }
+
+  /* Member name */
+  .photo-card__name {
+    font-size: 0.78rem !important;
+    line-height: 1.25 !important;
+    margin-bottom: 5px !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Designation */
+  .photo-card__role {
+    display: block !important;
+
+    font-size: 0.55rem !important;
+    line-height: 1.45 !important;
+    letter-spacing: 0.07em !important;
+
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+  }
+
+  /* Number */
+  .photo-card__index {
+    flex: 0 0 auto !important;
+    margin-left: 4px !important;
+    margin-top: 1px !important;
+
+    font-size: 0.68rem !important;
+    line-height: 1 !important;
+  }
+}
+
+
+/* Extra small phones */
+@media (max-width: 380px) {
+
+  .photo-grid-full,
+  .photo-grid-home {
+    gap: 8px !important;
+  }
+
+  .photo-card__info {
+    padding: 10px 8px 11px !important;
+  }
+
+  .photo-card__name {
+    font-size: 0.72rem !important;
+  }
+
+  .photo-card__role {
+    font-size: 0.50rem !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  .photo-card__index {
+    font-size: 0.62rem !important;
+  }
+}
+    
