@@ -1,133 +1,2080 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Team — Kishanganj Youth Club</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Volunteer Panel | Kishanganj Youth Club</title>
+
+  <style>
+    :root {
+      --primary: #8b0000;
+      --primary-dark: #650000;
+      --primary-light: #fff3f3;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e8e8e8;
+      --bg: #f7f7f8;
+      --white: #ffffff;
+      --success: #15803d;
+      --warning: #b45309;
+      --danger: #b91c1c;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      --radius: 18px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================
+       APP
+    ========================= */
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* =========================
+       SIDEBAR
+    ========================= */
+
+    .sidebar {
+      width: 260px;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      padding: 22px 16px;
+      transition: 0.3s ease;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 8px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-logo {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      background: var(--primary);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .brand-text span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .nav {
+      margin-top: 24px;
+      flex: 1;
+    }
+
+    .nav-title {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 12px 10px;
+    }
+
+    .nav-item {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 13px;
+      border-radius: 11px;
+      margin-bottom: 5px;
+      color: #4b5563;
+      text-align: left;
+      transition: 0.2s ease;
+    }
+
+    .nav-item svg {
+      width: 19px;
+      height: 19px;
+      flex-shrink: 0;
+    }
+
+    .nav-item:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .nav-item.active {
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+    }
+
+    .logout {
+      border-top: 1px solid var(--border);
+      padding-top: 15px;
+    }
+
+    .logout button {
+      color: var(--danger);
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .main {
+      margin-left: 260px;
+      width: calc(100% - 260px);
+      min-height: 100vh;
+    }
+
+    /* =========================
+       TOPBAR
+    ========================= */
+
+    .topbar {
+      height: 74px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .mobile-menu {
+      display: none;
+      border: 0;
+      background: transparent;
+      color: var(--primary);
+    }
+
+    .page-title h2 {
+      font-size: 20px;
+    }
+
+    .page-title p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .notification {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: white;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .notification svg {
+      width: 19px;
+    }
+
+    .notification-dot {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      background: var(--primary);
+      border-radius: 50%;
+      top: 8px;
+      right: 9px;
+      border: 2px solid white;
+    }
+
+    .user-mini {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .user-mini strong {
+      font-size: 13px;
+      display: block;
+    }
+
+    .user-mini span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* =========================
+       CONTENT
+    ========================= */
+
+    .content {
+      padding: 30px 32px 50px;
+      max-width: 1500px;
+      margin: auto;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* =========================
+       WELCOME
+    ========================= */
+
+    .welcome {
+      background: linear-gradient(135deg, #8b0000, #650000);
+      color: white;
+      border-radius: 22px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+
+    .welcome::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border: 45px solid rgba(255,255,255,0.05);
+      border-radius: 50%;
+      right: -80px;
+      top: -100px;
+    }
+
+    .welcome-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .welcome small {
+      opacity: 0.8;
+    }
+
+    .welcome h1 {
+      margin: 8px 0;
+      font-size: 27px;
+    }
+
+    .welcome p {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .volunteer-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 17px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 7px 12px;
+      border-radius: 30px;
+      font-size: 12px;
+    }
+
+    .active-dot {
+      width: 7px;
+      height: 7px;
+      background: #4ade80;
+      border-radius: 50%;
+    }
+
+    /* =========================
+       STAT CARDS
+    ========================= */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: grid;
+      place-items: center;
+    }
+
+    .stat-icon svg {
+      width: 20px;
+    }
+
+    .stat-card h3 {
+      font-size: 27px;
+      margin-top: 15px;
+    }
+
+    .stat-card p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* =========================
+       GRID
+    ========================= */
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .card-header h3 {
+      font-size: 16px;
+    }
+
+    .card-header a {
+      color: var(--primary);
+      font-size: 12px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* =========================
+       TASK
+    ========================= */
+
+    .task-card {
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 17px;
+    }
+
+    .task-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .task-project {
+      font-size: 11px;
+      color: var(--primary);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .task-card h4 {
+      margin: 7px 0;
+      font-size: 15px;
+    }
+
+    .task-card p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .status {
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status.progress {
+      color: var(--warning);
+      background: #fff7ed;
+    }
+
+    .status.completed {
+      color: var(--success);
+      background: #f0fdf4;
+    }
+
+    .status.assigned {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .task-meta {
+      display: flex;
+      gap: 16px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .task-meta span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .task-meta svg {
+      width: 14px;
+      vertical-align: middle;
+      margin-right: 3px;
+    }
+
+    .progress-line {
+      height: 6px;
+      background: #eee;
+      border-radius: 10px;
+      margin-top: 17px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 60%;
+      background: var(--primary);
+      border-radius: inherit;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 15px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      color: white;
+      background: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-outline {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .task-actions {
+      margin-top: 17px;
+      display: flex;
+      gap: 8px;
+    }
+
+    /* =========================
+       ACTIVITIES
+    ========================= */
+
+    .activity {
+      display: flex;
+      gap: 13px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .activity:last-child {
+      border-bottom: 0;
+    }
+
+    .date-box {
+      width: 45px;
+      height: 48px;
+      border-radius: 10px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .date-box strong {
+      font-size: 16px;
+    }
+
+    .date-box span {
+      font-size: 9px;
+      text-transform: uppercase;
+    }
+
+    .activity h4 {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .activity p {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    /* =========================
+       TABLE
+    ========================= */
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 14px 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    /* =========================
+       IMPACT
+    ========================= */
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .impact-card {
+      border: 1px solid var(--border);
+      padding: 22px;
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .impact-card h2 {
+      color: var(--primary);
+      font-size: 28px;
+    }
+
+    .impact-card p {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .badges {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .badge-card {
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 20px 12px;
+      text-align: center;
+    }
+
+    .badge-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin: auto;
+      display: grid;
+      place-items: center;
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .badge-card h4 {
+      margin-top: 10px;
+      font-size: 12px;
+    }
+
+    .badge-card p {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* =========================
+       PROFILE
+    ========================= */
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .profile-avatar {
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      font-weight: 700;
+    }
+
+    .profile-header h2 {
+      font-size: 21px;
+    }
+
+    .profile-header p {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 17px;
+      margin-top: 22px;
+    }
+
+    .field label {
+      font-size: 11px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      border: 1px solid var(--border);
+      padding: 11px 12px;
+      border-radius: 10px;
+      outline: none;
+      background: #fafafa;
+    }
+
+    /* =========================
+       CERTIFICATES
+    ========================= */
+
+    .certificate {
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 12px;
+    }
+
+    .certificate-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 10px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: grid;
+      place-items: center;
+    }
+
+    .certificate-info {
+      flex: 1;
+    }
+
+    .certificate-info h4 {
+      font-size: 13px;
+    }
+
+    .certificate-info p {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    /* =========================
+       OVERLAY
+    ========================= */
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 999;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 1000px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .badges {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .overlay.show {
+        display: block;
+      }
+
+      .main {
+        margin-left: 0;
+        width: 100%;
+      }
+
+      .topbar {
+        height: 65px;
+        padding: 0 16px;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .page-title {
+        display: none;
+      }
+
+      .user-mini > div:last-child {
+        display: none;
+      }
+
+      .content {
+        padding: 18px 14px 35px;
+      }
+
+      .welcome {
+        padding: 22px;
+        border-radius: 17px;
+      }
+
+      .welcome h1 {
+        font-size: 22px;
+      }
+
+      .stats {
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 15px;
+      }
+
+      .stat-card h3 {
+        font-size: 22px;
+      }
+
+      .stat-icon {
+        width: 35px;
+        height: 35px;
+      }
+
+      .card {
+        padding: 17px;
+      }
+
+      .impact-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-header {
+        align-items: flex-start;
+      }
+
+      .certificate {
+        align-items: flex-start;
+      }
+
+      .certificate .btn {
+        font-size: 10px;
+        padding: 8px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stats .stat-card {
+        min-width: 0;
+      }
+
+      .stat-card h3 {
+        font-size: 20px;
+      }
+
+      .impact-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .badges {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .task-top {
+        flex-direction: column;
+      }
+
+      .task-actions {
+        flex-direction: column;
+      }
+
+      .task-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- ── NAVBAR ──────────────────────────────────────────────── -->
-<nav class="navbar" id="navbar">
-  <a href="index.html" class="nav-logo">
-    <img src="assets/logo.png" alt="KYC Logo" class="nav-logo-img">
-    <span class="nav-logo-text">KISHANGANJ YOUTH CLUB<span>.</span></span>
-  </a>
-  <div class="nav-links">
-    <a href="index.html"    class="nav-link">Home</a>
-    <a href="about.html"    class="nav-link">About</a>
-    <a href="projects.html" class="nav-link">Projects</a>
-    <a href="mission.html"  class="nav-link">Mission</a>
-    <a href="team.html"     class="nav-link">Team</a>
-    <a href="track.html"    class="nav-link">Track</a>
-  </div>
-  <div class="flex gap-8">
-    <a href="join.html"      class="btn btn-primary btn-sm nav-cta">Join Us</a>
-    
-  </div>
-  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
+<div class="app">
 
-<div class="mobile-menu" id="mobileMenu">
-  <a href="index.html"     class="nav-link">Home</a>
-  <a href="about.html"     class="nav-link">About</a>
-  <a href="projects.html"  class="nav-link">Projects</a>
-  <a href="mission.html"   class="nav-link">Mission</a>
-  <a href="team.html"      class="nav-link">Team</a>
-  <a href="track.html"     class="nav-link">Track Status</a>
-  <a href="join.html"      class="nav-link">Join Us</a>
-  <a href="volunteer.html" class="nav-link">Volunteer Login</a>
+  <!-- =========================
+       SIDEBAR
+  ========================= -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-logo">KYC</div>
+
+      <div class="brand-text">
+        <strong>Kishanganj</strong>
+        <span>Youth Club</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+
+      <div class="nav-title">Volunteer</div>
+
+      <button class="nav-item active" data-page="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        Dashboard
+      </button>
+
+      <button class="nav-item" data-page="tasks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+        </svg>
+        My Tasks
+      </button>
+
+      <button class="nav-item" data-page="activities">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        Activities
+      </button>
+
+      <button class="nav-item" data-page="attendance">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+        Attendance
+      </button>
+
+      <button class="nav-item" data-page="impact">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2l3 7 7 .5-5.5 4.5 2 7L12 17l-6.5 4 2-7L2 9.5 9 9z"/>
+        </svg>
+        My Impact
+      </button>
+
+      <button class="nav-item" data-page="certificates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 3h16v18l-8-4-8 4z"/>
+        </svg>
+        Certificates
+      </button>
+
+      <button class="nav-item" data-page="profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c0-4 3-7 8-7s8 3 8 7"/>
+        </svg>
+        My Profile
+      </button>
+
+    </nav>
+
+    <div class="logout">
+
+      <button class="nav-item" onclick="logout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10 17l5-5-5-5"/>
+          <path d="M15 12H3"/>
+          <path d="M21 19V5a2 2 0 00-2-2h-6"/>
+        </svg>
+        Logout
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <div class="overlay" id="overlay"></div>
+
+
+  <!-- =========================
+       MAIN
+  ========================= -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <button class="mobile-menu" id="menuBtn">
+        <svg width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <div class="page-title">
+        <h2 id="pageTitle">Volunteer Dashboard</h2>
+        <p>Kishanganj Youth Club</p>
+      </div>
+
+      <div class="top-actions">
+
+        <button class="notification">
+          <span class="notification-dot"></span>
+
+          <svg viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+            <path d="M10 21h4"/>
+          </svg>
+        </button>
+
+        <div class="user-mini">
+          <div class="avatar">AA</div>
+
+          <div>
+            <strong>Aarzoo</strong>
+            <span>Volunteer</span>
+          </div>
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <section class="content">
+
+      <!-- =========================
+           DASHBOARD
+      ========================= -->
+
+      <div class="page active" id="dashboard">
+
+        <section class="welcome">
+
+          <div class="welcome-content">
+
+            <small>KISHANGANJ YOUTH CLUB</small>
+
+            <h1>Welcome back, Aarzoo 👋</h1>
+
+            <p>
+              Keep contributing. Every small action makes Kishanganj better.
+            </p>
+
+            <div class="volunteer-badge">
+              <span class="active-dot"></span>
+              KYC-VOL-0001 · Active Volunteer
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <section class="stats">
+
+          <div class="stat-card">
+
+            <div class="stat-top">
+
+              <div>
+                <h3>04</h3>
+                <p>Assigned Tasks</p>
+              </div>
+
+              <div class="stat-icon">
+                <svg viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 11l3 3L22 4"/>
+                  <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+                </svg>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-top">
+
+              <div>
+                <h3>12</h3>
+                <p>Completed Tasks</p>
+              </div>
+
+              <div class="stat-icon">
+                <svg viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-top">
+
+              <div>
+                <h3>36h</h3>
+                <p>Volunteer Hours</p>
+              </div>
+
+              <div class="stat-icon">
+                <svg viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M12 7v5l3 2"/>
+                </svg>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-top">
+
+              <div>
+                <h3>08</h3>
+                <p>Activities Joined</p>
+              </div>
+
+              <div class="stat-icon">
+                <svg viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 2v4"/>
+                  <path d="M16 2v4"/>
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <path d="M3 10h18"/>
+                </svg>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <section class="grid-2">
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3>Current Task</h3>
+              <a onclick="showPage('tasks')">View all</a>
+            </div>
+
+            <div class="task-card">
+
+              <div class="task-top">
+
+                <div>
+                  <span class="task-project">
+                    Mission Clean City
+                  </span>
+
+                  <h4>
+                    Garbage Hotspot Verification
+                  </h4>
+
+                  <p>
+                    Verify the reported garbage hotspot and submit
+                    before/after photographs with a short report.
+                  </p>
+                </div>
+
+                <span class="status progress">
+                  In Progress
+                </span>
+
+              </div>
+
+              <div class="task-meta">
+
+                <span>📍 Ward 09, Faringora</span>
+
+                <span>📅 22 Aug 2026</span>
+
+                <span>⚡ High Priority</span>
+
+              </div>
+
+              <div class="progress-line">
+                <div class="progress-fill"></div>
+              </div>
+
+              <div class="task-actions">
+
+                <button
+                  class="btn btn-primary"
+                  onclick="showPage('tasks')">
+                  View Task
+                </button>
+
+                <button class="btn btn-outline">
+                  Submit Proof
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3>Upcoming Activities</h3>
+              <a onclick="showPage('activities')">View all</a>
+            </div>
+
+            <div class="activity">
+
+              <div class="date-box">
+                <div>
+                  <strong>23</strong>
+                  <span>Aug</span>
+                </div>
+              </div>
+
+              <div>
+                <h4>Mission Clean City</h4>
+                <p>10:00 AM · Ward 09</p>
+              </div>
+
+            </div>
+
+
+            <div class="activity">
+
+              <div class="date-box">
+                <div>
+                  <strong>28</strong>
+                  <span>Aug</span>
+                </div>
+              </div>
+
+              <div>
+                <h4>Youth Awareness Drive</h4>
+                <p>09:00 AM · Kishanganj</p>
+              </div>
+
+            </div>
+
+
+            <div class="activity">
+
+              <div class="date-box">
+                <div>
+                  <strong>05</strong>
+                  <span>Sep</span>
+                </div>
+              </div>
+
+              <div>
+                <h4>Volunteer Meeting</h4>
+                <p>05:00 PM · KYC Office</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- =========================
+           TASKS
+      ========================= -->
+
+      <div class="page" id="tasks">
+
+        <div class="card">
+
+          <div class="card-header">
+            <h3>My Tasks</h3>
+
+            <button class="btn btn-outline">
+              Filter
+            </button>
+          </div>
+
+
+          <div class="task-card">
+
+            <div class="task-top">
+
+              <div>
+                <span class="task-project">
+                  Mission Clean City
+                </span>
+
+                <h4>
+                  Garbage Hotspot Verification
+                </h4>
+
+                <p>
+                  Verify the reported garbage location and upload
+                  before and after photographs.
+                </p>
+              </div>
+
+              <span class="status progress">
+                In Progress
+              </span>
+
+            </div>
+
+            <div class="task-meta">
+              <span>📍 Ward 09</span>
+              <span>📅 22 Aug 2026</span>
+              <span>👤 Assigned by Admin</span>
+            </div>
+
+            <div class="progress-line">
+              <div class="progress-fill"></div>
+            </div>
+
+            <div class="task-actions">
+              <button class="btn btn-primary">
+                Continue Task
+              </button>
+
+              <button class="btn btn-outline">
+                View Instructions
+              </button>
+            </div>
+
+          </div>
+
+
+          <div class="task-card">
+
+            <div class="task-top">
+
+              <div>
+                <span class="task-project">
+                  Mission Clean City
+                </span>
+
+                <h4>
+                  Ward 09 Complaint Verification
+                </h4>
+
+                <p>
+                  Verify the complaint submitted through the KYC
+                  complaint tracking system.
+                </p>
+              </div>
+
+              <span class="status assigned">
+                Assigned
+              </span>
+
+            </div>
+
+            <div class="task-meta">
+              <span>📍 Ward 09</span>
+              <span>📅 24 Aug 2026</span>
+            </div>
+
+            <div class="task-actions">
+              <button class="btn btn-primary">
+                Accept Task
+              </button>
+
+              <button class="btn btn-outline">
+                Details
+              </button>
+            </div>
+
+          </div>
+
+
+          <div class="task-card">
+
+            <div class="task-top">
+
+              <div>
+                <span class="task-project">
+                  Awareness Campaign
+                </span>
+
+                <h4>
+                  Student Outreach
+                </h4>
+
+                <p>
+                  Contact assigned students and share campaign information.
+                </p>
+              </div>
+
+              <span class="status completed">
+                Completed
+              </span>
+
+            </div>
+
+            <div class="task-meta">
+              <span>📍 Kishanganj</span>
+              <span>✓ Verified</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           ACTIVITIES
+      ========================= -->
+
+      <div class="page" id="activities">
+
+        <div class="card">
+
+          <div class="card-header">
+            <h3>Upcoming Activities</h3>
+          </div>
+
+
+          <div class="activity">
+
+            <div class="date-box">
+              <div>
+                <strong>23</strong>
+                <span>Aug</span>
+              </div>
+            </div>
+
+            <div style="flex:1">
+              <h4>Mission Clean City</h4>
+              <p>
+                10:00 AM · Ward 09 · Faringora
+              </p>
+
+              <div class="task-actions">
+                <button class="btn btn-primary">
+                  I'm Participating
+                </button>
+
+                <button class="btn btn-outline">
+                  Details
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="activity">
+
+            <div class="date-box">
+              <div>
+                <strong>28</strong>
+                <span>Aug</span>
+              </div>
+            </div>
+
+            <div style="flex:1">
+              <h4>Youth Awareness Drive</h4>
+              <p>
+                09:00 AM · Kishanganj
+              </p>
+
+              <div class="task-actions">
+                <button class="btn btn-primary">
+                  I'm Participating
+                </button>
+
+                <button class="btn btn-outline">
+                  Details
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="activity">
+
+            <div class="date-box">
+              <div>
+                <strong>05</strong>
+                <span>Sep</span>
+              </div>
+            </div>
+
+            <div style="flex:1">
+              <h4>Volunteer Meeting</h4>
+              <p>
+                05:00 PM · KYC Office
+              </p>
+
+              <div class="task-actions">
+                <button class="btn btn-primary">
+                  I'm Participating
+                </button>
+
+                <button class="btn btn-outline">
+                  Details
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           ATTENDANCE
+      ========================= -->
+
+      <div class="page" id="attendance">
+
+        <div class="card">
+
+          <div class="card-header">
+            <h3>My Attendance</h3>
+          </div>
+
+          <div class="table-wrapper">
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Activity</th>
+                  <th>Location</th>
+                  <th>Check-in</th>
+                  <th>Hours</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr>
+                  <td>10 Aug 2026</td>
+                  <td>Mission Clean City</td>
+                  <td>Ward 09</td>
+                  <td>09:52 AM</td>
+                  <td>3h 10m</td>
+                  <td>
+                    <span class="status completed">Present</span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>05 Aug 2026</td>
+                  <td>Awareness Drive</td>
+                  <td>Kishanganj</td>
+                  <td>10:02 AM</td>
+                  <td>2h 30m</td>
+                  <td>
+                    <span class="status completed">Present</span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>28 Jul 2026</td>
+                  <td>Volunteer Meeting</td>
+                  <td>KYC Office</td>
+                  <td>04:58 PM</td>
+                  <td>1h 20m</td>
+                  <td>
+                    <span class="status completed">Present</span>
+                  </td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           IMPACT
+      ========================= -->
+
+      <div class="page" id="impact">
+
+        <div class="card">
+
+          <div class="card-header">
+            <h3>My Impact</h3>
+          </div>
+
+          <div class="impact-grid">
+
+            <div class="impact-card">
+              <h2>12</h2>
+              <p>Tasks Completed</p>
+            </div>
+
+            <div class="impact-card">
+              <h2>36h</h2>
+              <p>Volunteer Hours</p>
+            </div>
+
+            <div class="impact-card">
+              <h2>08</h2>
+              <p>Activities Joined</p>
+            </div>
+
+            <div class="impact-card">
+              <h2>04</h2>
+              <p>Wards Covered</p>
+            </div>
+
+            <div class="impact-card">
+              <h2>23</h2>
+              <p>Reports Submitted</p>
+            </div>
+
+            <div class="impact-card">
+              <h2>18</h2>
+              <p>Verified Contributions</p>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="card-header">
+            <h3>Achievements</h3>
+          </div>
+
+          <div class="badges">
+
+            <div class="badge-card">
+
+              <div class="badge-icon">
+                🏅
+              </div>
+
+              <h4>First Task</h4>
+              <p>Completed your first task</p>
+
+            </div>
+
+
+            <div class="badge-card">
+
+              <div class="badge-icon">
+                ⭐
+              </div>
+
+              <h4>10 Tasks</h4>
+              <p>Completed 10 tasks</p>
+
+            </div>
+
+
+            <div class="badge-card">
+
+              <div class="badge-icon">
+                🕐
+              </div>
+
+              <h4>25 Hours</h4>
+              <p>Completed 25 volunteer hours</p>
+
+            </div>
+
+
+            <div class="badge-card">
+
+              <div class="badge-icon">
+                🏆
+              </div>
+
+              <h4>Clean City</h4>
+              <p>Mission Clean City contributor</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           CERTIFICATES
+      ========================= -->
+
+      <div class="page" id="certificates">
+
+        <div class="card">
+
+          <div class="card-header">
+            <h3>My Certificates</h3>
+          </div>
+
+
+          <div class="certificate">
+
+            <div class="certificate-icon">
+              📜
+            </div>
+
+            <div class="certificate-info">
+              <h4>Mission Clean City Volunteer Certificate</h4>
+              <p>Issued: 23 August 2026</p>
+            </div>
+
+            <button class="btn btn-primary">
+              View
+            </button>
+
+          </div>
+
+
+          <div class="certificate">
+
+            <div class="certificate-icon">
+              📜
+            </div>
+
+            <div class="certificate-info">
+              <h4>Volunteer Participation Certificate</h4>
+              <p>Issued: 05 August 2026</p>
+            </div>
+
+            <button class="btn btn-primary">
+              View
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           PROFILE
+      ========================= -->
+
+      <div class="page" id="profile">
+
+        <div class="card">
+
+          <div class="profile-header">
+
+            <div class="profile-avatar">
+              AA
+            </div>
+
+            <div>
+              <h2>Aarzoo</h2>
+              <p>
+                KYC-VOL-0001 · Active Volunteer
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="profile-grid">
+
+            <div class="field">
+              <label>Full Name</label>
+              <input value="Aarzoo">
+            </div>
+
+            <div class="field">
+              <label>Volunteer ID</label>
+              <input value="KYC-VOL-0001" disabled>
+            </div>
+
+            <div class="field">
+              <label>Ward</label>
+              <input value="Ward 09">
+            </div>
+
+            <div class="field">
+              <label>Joining Date</label>
+              <input value="05 June 2026" disabled>
+            </div>
+
+            <div class="field">
+              <label>Phone</label>
+              <input value="+91 XXXXX XXXXX">
+            </div>
+
+            <div class="field">
+              <label>Email</label>
+              <input value="volunteer@example.com">
+            </div>
+
+            <div class="field">
+              <label>Skills</label>
+              <input value="Graphic Design, Digital Media">
+            </div>
+
+            <div class="field">
+              <label>Availability</label>
+
+              <select>
+                <option>Flexible</option>
+                <option>Weekdays</option>
+                <option>Weekends</option>
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <div class="task-actions">
+
+            <button class="btn btn-primary">
+              Save Changes
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
 </div>
 
-<!-- ── MAIN CONTENT ─────────────────────────────────────────── -->
-<main style="padding-top:70px">
-  <section class="section">
-    <div class="container">
 
-      <!-- Intro — left-aligned exactly as original design -->
-      <div class="team-page-intro">
-        <div class="section-tag">Volunteer Portal</div>
-        <h1 class="page-hero-title fade-in">Coming <span>Soon !</span></h1>
-        <p>Track assigned tasks, submit field reports, update completion status, and see your personal impact — all in one place.</p>
-      </div>
+<script>
 
-      
-    </div>
-  </section>
+  /* =========================
+     PAGE NAVIGATION
+  ========================= */
 
-<!-- ─────────────────────────── FOOTER ──────────────────────── -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
+  const navItems = document.querySelectorAll(".nav-item[data-page]");
+  const pages = document.querySelectorAll(".page");
+  const pageTitle = document.getElementById("pageTitle");
 
-      <div>
-        <div class="nav-logo" style="margin-bottom:16px">
-          <img src="assets/logo.png" alt="KYC Logo" class="nav-logo-img">
-          <span class="nav-logo-text">KYC<span>.</span></span>
-        </div>
-        <p class="footer-brand-desc">Kishanganj Youth Club — transforming our city through direct action, community pressure, and youth power. Mission Clean City is our commitment to Kishanganj.</p>
-        <div class="social-links">
-          <a href="#" class="social-link" title="Instagram">
-            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          </a>
-          <a href="#" class="social-link" title="Facebook">
-            <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-          </a>
-          <a href="#" class="social-link" title="Twitter / X">
-            <svg viewBox="0 0 24 24"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
-          </a>
-          <a href="#" class="social-link" title="YouTube">
-            <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
-          </a>
-          <a href="#" class="social-link" title="WhatsApp">
-            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          </a>
-        </div>
-      </div>
+  const titles = {
+    dashboard: "Volunteer Dashboard",
+    tasks: "My Tasks",
+    activities: "Activities",
+    attendance: "My Attendance",
+    impact: "My Impact",
+    certificates: "My Certificates",
+    profile: "My Profile"
+  };
 
-      <div>
-        <div class="footer-heading">Navigation</div>
-        <div class="footer-links">
-          <a href="index.html"    class="footer-link">Home</a>
-          <a href="about.html"    class="footer-link">About Us</a>
-          <a href="projects.html" class="footer-link">Projects</a>
-          <a href="mission.html"  class="footer-link">Mission Clean City</a>
-          <a href="team.html"     class="footer-link">Our Team</a>
-        </div>
-      </div>
 
-      <div>
-        <div class="footer-heading">Take Action</div>
-        <div class="footer-links">
-          <a href="join.html"      class="footer-link">Join as Volunteer</a>
-          <a href="mission.html"   class="footer-link">Report an Issue</a>
-          <a href="track.html"     class="footer-link">Track Complaint</a>
-          <a href="volunteer.html" class="footer-link">Volunteer Login</a>
-        </div>
-      </div>
+  function showPage(pageName) {
 
-      <div>
-        <div class="footer-heading">Contact</div>
-        <div class="footer-links">
-          <a href="mailto:team.kishanganjyouthclub@gmail.com" class="footer-link">team.kishanganjyouthclub@gmail.com</a>
-          <a href="tel:+919876543210"              class="footer-link">+91 82712 70712</a>
-          <span class="footer-link" style="cursor:default">Kishanganj, Bihar (855108)</span>
-        </div>
-      </div>
+    pages.forEach(page => {
+      page.classList.remove("active");
+    });
 
-    </div>
+    const selectedPage = document.getElementById(pageName);
 
-    <div class="footer-bottom">
-      <span>© 2026 Kishanganj Youth Club. All rights reserved.</span>
-      
-    </div>
-  </div>
-</footer>
+    if (selectedPage) {
+      selectedPage.classList.add("active");
+    }
 
-<script src="script.js"></script>
+
+    navItems.forEach(item => {
+      item.classList.remove("active");
+
+      if (item.dataset.page === pageName) {
+        item.classList.add("active");
+      }
+    });
+
+
+    pageTitle.textContent = titles[pageName] || "Volunteer Panel";
+
+    closeMobileMenu();
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
+
+  navItems.forEach(item => {
+
+    item.addEventListener("click", () => {
+
+      showPage(item.dataset.page);
+
+    });
+
+  });
+
+
+  /* =========================
+     MOBILE SIDEBAR
+  ========================= */
+
+  const menuBtn = document.getElementById("menuBtn");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+
+
+  function openMobileMenu() {
+
+    sidebar.classList.add("open");
+    overlay.classList.add("show");
+
+  }
+
+
+  function closeMobileMenu() {
+
+    sidebar.classList.remove("open");
+    overlay.classList.remove("show");
+
+  }
+
+
+  menuBtn.addEventListener("click", openMobileMenu);
+
+  overlay.addEventListener("click", closeMobileMenu);
+
+
+  /* =========================
+     LOGOUT
+  ========================= */
+
+  function logout() {
+
+    const confirmLogout = confirm(
+      "Are you sure you want to logout?"
+    );
+
+    if (!confirmLogout) return;
+
+    /*
+      Firebase logout yahan connect hoga:
+
+      firebase.auth().signOut()
+        .then(() => {
+          window.location.href = "login.html";
+        });
+    */
+
+    alert("Logout system will be connected with Firebase.");
+
+  }
+
+
+  /* =========================
+     BUTTON DEMO ACTIONS
+  ========================= */
+
+  document.querySelectorAll(".btn").forEach(button => {
+
+    if (
+      button.textContent.includes("Submit Proof") ||
+      button.textContent.includes("Save Changes")
+    ) {
+
+      button.addEventListener("click", () => {
+
+        alert(
+          "Firebase integration ke baad ye action database/storage se connect hoga."
+        );
+
+      });
+
+    }
+
+  });
+
+</script>
+
 </body>
 </html>
