@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Volunteer Login | Kishanganj Youth Club</title>
+
+<style>
+:root{
+    --bg:#070a08;
+    --card:#0d120f;
+    --text:#f2f5f3;
+    --muted:#8d9891;
+    --green:#4ade80;
+    --border:rgba(255,255,255,.10);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:var(--bg);
+    color:var(--text);
+
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+/* Container */
+
+.login-container{
+    width:100%;
+    max-width:390px;
+    padding:20px;
+}
+
+/* Logo */
+
+.logo{
+    text-align:center;
+    margin-bottom:28px;
+}
+
+.logo-icon{
+    width:46px;
+    height:46px;
+
+    margin:0 auto 12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border:1px solid rgba(74,222,128,.25);
+    border-radius:12px;
+
+    color:var(--green);
+    background:rgba(74,222,128,.06);
+}
+
+.logo-icon svg{
+    width:24px;
+    height:24px;
+}
+
+.logo h1{
+    font-size:20px;
+    font-weight:600;
+}
+
+.logo p{
+    margin-top:5px;
+    font-size:13px;
+    color:var(--muted);
+}
+
+/* Card */
+
+.login-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:28px;
+}
+
+/* Heading */
+
+.login-card h2{
+    font-size:21px;
+    text-align:center;
+    margin-bottom:7px;
+}
+
+.description{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+    margin-bottom:25px;
+}
+
+/* Form */
+
+.form-group{
+    margin-bottom:17px;
+}
+
+label{
+    display:block;
+    font-size:13px;
+    margin-bottom:7px;
+    color:#d9dfdb;
+}
+
+.input{
+    width:100%;
+    height:46px;
+
+    padding:0 13px;
+
+    background:#090d0a;
+    border:1px solid var(--border);
+    border-radius:9px;
+
+    color:var(--text);
+    outline:none;
+
+    font-size:14px;
+}
+
+.input::placeholder{
+    color:#68726c;
+}
+
+.input:focus{
+    border-color:rgba(74,222,128,.45);
+}
+
+/* Options */
+
+.options{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin:4px 0 20px;
+
+    font-size:12px;
+}
+
+.remember{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:var(--muted);
+}
+
+.remember input{
+    accent-color:var(--green);
+}
+
+.forgot{
+    color:var(--green);
+    text-decoration:none;
+}
+
+/* Button */
+
+.login-btn{
+    width:100%;
+    height:46px;
+
+    border:none;
+    border-radius:9px;
+
+    background:var(--green);
+    color:#061008;
+
+    font-size:14px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.login-btn:hover{
+    opacity:.9;
+}
+
+/* Back */
+
+.back{
+    text-align:center;
+    margin-top:20px;
+}
+
+.back a{
+    color:var(--muted);
+    text-decoration:none;
+    font-size:13px;
+}
+
+.back a:hover{
+    color:var(--green);
+}
+
+/* Footer */
+
+.footer{
+    text-align:center;
+    margin-top:18px;
+
+    color:#59635d;
+    font-size:10px;
+}
+
+/* Mobile */
+
+@media(max-width:480px){
+
+    .login-container{
+        padding:16px;
+    }
+
+    .login-card{
+        padding:24px 20px;
+    }
+
+    .logo{
+        margin-bottom:22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <!-- Logo -->
+    <div class="logo">
+
+        <div class="logo-icon">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <circle cx="9" cy="7" r="3"/>
+                <path d="M3.5 20c.5-3.2 2.5-5 5.5-5s5 1.8 5.5 5"/>
+
+                <circle cx="17" cy="8" r="2.3"/>
+                <path d="M15 14c2.8 0 4.5 1.6 5 4"/>
+
+            </svg>
+
+        </div>
+
+        <h1>Kishanganj Youth Club</h1>
+        <p>Volunteer Portal</p>
+
+    </div>
+
+
+    <!-- Login Card -->
+
+    <div class="login-card">
+
+        <h2>Volunteer Login</h2>
+
+        <p class="description">
+            Sign in to access your volunteer dashboard.
+        </p>
+
+
+        <form id="loginForm">
+
+            <!-- Volunteer ID -->
+
+            <div class="form-group">
+
+                <label for="volunteerId">
+                    Volunteer ID / Email
+                </label>
+
+                <input
+                    class="input"
+                    type="text"
+                    id="volunteerId"
+                    placeholder="Enter your ID or email"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Password -->
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    class="input"
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Options -->
+
+            <div class="options">
+
+                <label class="remember">
+
+                    <input type="checkbox">
+
+                    Remember me
+
+                </label>
+
+                <a href="#" class="forgot">
+                    Forgot Password?
+                </a>
+
+            </div>
+
+
+            <!-- Button -->
+
+            <button type="submit" class="login-btn">
+                Sign In
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Back -->
+
+    <div class="back">
+
+        <a href="index.html">
+            ← Back to Home
+        </a>
+
+    </div>
+
+
+    <div class="footer">
+        © 2026 Kishanganj Youth Club
+    </div>
+
+</div>
+
+
+<script>
+
+document.getElementById("loginForm").addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    alert("Firebase login will be connected here.");
+
+});
+
+</script>
+
+</body>
+</html>
